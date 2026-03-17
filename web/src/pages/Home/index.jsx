@@ -23,6 +23,7 @@ import {
   Input,
   ScrollList,
   ScrollItem,
+  Card,
 } from '@douyinfe/semi-ui';
 import { API, showError, copy, showSuccess } from '../../helpers';
 import { useIsMobile } from '../../hooks/common/useIsMobile';
@@ -36,6 +37,9 @@ import {
   IconPlay,
   IconFile,
   IconCopy,
+  IconKey,
+  IconLink,
+  IconGift,
 } from '@douyinfe/semi-icons';
 import { Link } from 'react-router-dom';
 import NoticeModal from '../../components/layout/NoticeModal';
@@ -50,11 +54,29 @@ const Home = () => {
   const isMobile = useIsMobile();
   const isDemoSiteMode = statusState?.status?.demo_site_enabled || false;
   const docsLink = statusState?.status?.docs_link || '';
-  const serverAddress =
-    statusState?.status?.server_address || `${window.location.origin}`;
+  const serverAddress = statusState?.status?.server_address || `${window.location.origin}`;
   const endpointItems = API_ENDPOINTS.map((e) => ({ value: e }));
   const [endpointIndex, setEndpointIndex] = useState(0);
+  const [openclawUrl, setOpenclawUrl] = useState('http://ai.bbs5050.com/v1');
+  const [generatedKey, setGeneratedKey] = useState('');
+  const [inviteLink, setInviteLink] = useState('');
   const isChinese = i18n.language.startsWith('zh');
+
+  // 生成随机密钥令牌
+  const generateRandomKey = () => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < 32; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  };
+
+  // 生成邀请链接
+  const generateInviteLink = () => {
+    const userId = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).id : 'guest';
+    return `${window.location.origin}?aff=${userId}`;
+  };
 
   const displayHomePageContent = async () => {
     setHomePageContent(localStorage.getItem('home_page_content') || '');
@@ -92,6 +114,27 @@ const Home = () => {
     }
   };
 
+  const handleCopyKey = async () => {
+    const ok = await copy(generatedKey);
+    if (ok) {
+      showSuccess(t('已复制密钥到剪切板'));
+    }
+  };
+
+  const handleCopyInviteLink = async () => {
+    const ok = await copy(inviteLink);
+    if (ok) {
+      showSuccess(t('已复制邀请链接到剪切板'));
+    }
+  };
+
+  const regenerateKey = () => {
+    const newKey = generateRandomKey();
+    setGeneratedKey(newKey);
+    localStorage.setItem('openclaw_key', newKey);
+    showSuccess(t('已生成新密钥'));
+  };
+
   useEffect(() => {
     const checkNoticeAndShow = async () => {
       const lastCloseDate = localStorage.getItem('notice_close_date');
@@ -114,6 +157,19 @@ const Home = () => {
 
   useEffect(() => {
     displayHomePageContent().then();
+    
+    // 检查本地存储是否已有密钥，如果没有则生成新的
+    const storedKey = localStorage.getItem('openclaw_key');
+    if (!storedKey) {
+      const newKey = generateRandomKey();
+      setGeneratedKey(newKey);
+      localStorage.setItem('openclaw_key', newKey);
+    } else {
+      setGeneratedKey(storedKey);
+    }
+    
+    // 生成邀请链接
+    setInviteLink(generateInviteLink());
   }, []);
 
   useEffect(() => {
@@ -222,6 +278,93 @@ const Home = () => {
                   )
                 )}
               </div>
+            </div>
+
+            {/* OpenClaw 龙虾快捷使用指南 */}
+            <div className="max-w-6xl w-full px-4 mt-20">
+              <Card className="with-pastel-balls">
+                <div className="p-6">
+                  <h2 className="text-3xl font-700 mb-6 text-primary">OpenClaw 龙虾快捷使用指南</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                      <h3 className="text-xl font-600 mb-4 flex items-center gap-2">
+                        <IconKey />
+                        快速配置
+                      </h3>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-2">API 地址</label>
+                          <div className="flex gap-2">
+                            <Input
+                              value={openclawUrl}
+                              onChange={setOpenclawUrl}
+                              className="flex-1"
+                            />
+                            <Button
+                              type="primary"
+                              onClick={() => copy(openclawUrl).then(() => showSuccess('已复制地址到剪切板'))}
+                              icon={<IconCopy />}
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-2">密钥令牌</label>
+                          <div className="flex gap-2">
+                            <Input
+                              value={generatedKey}
+                              readOnly
+                              className="flex-1"
+                            />
+                            <Button
+                              type="primary"
+                              onClick={handleCopyKey}
+                              icon={<IconCopy />}
+                            />
+                            <Button
+                              onClick={regenerateKey}
+                              icon={<IconKey />}
+                            />
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-400 mt-4">
+                          输入以上 API 地址和密钥，即可快速使用 OpenClaw 龙虾服务。
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-600 mb-4 flex items-center gap-2">
+                        <IconGift />
+                        邀请奖励
+                      </h3>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-2">邀请链接</label>
+                          <div className="flex gap-2">
+                            <Input
+                              value={inviteLink}
+                              readOnly
+                              className="flex-1"
+                            />
+                            <Button
+                              type="primary"
+                              onClick={handleCopyInviteLink}
+                              icon={<IconCopy />}
+                            />
+                          </div>
+                        </div>
+                        <div className="bg-primary/10 p-4 rounded-lg">
+                          <h4 className="font-600 mb-2">邀请奖励规则</h4>
+                          <ul className="list-disc list-inside text-sm space-y-2">
+                            <li>邀请新用户注册并使用服务</li>
+                            <li>双方均可获得 10% 的收益奖励</li>
+                            <li>奖励自动发放到账户余额</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
             </div>
 
             {/* 产品卡片 */}
