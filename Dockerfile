@@ -1,9 +1,10 @@
 FROM oven/bun:latest AS builder
 
 WORKDIR /build
+# 只复制 package.json，安装依赖
 COPY web/package.json .
-COPY web/bun.lock .
 RUN bun install
+# 复制其他前端文件
 COPY ./web .
 COPY ./VERSION .
 RUN NODE_OPTIONS="--max-old-space-size=4096" DISABLE_ESLINT_PLUGIN='true' BROWSERSLIST_IGNORE_OLD_DATA=true VITE_REACT_APP_VERSION=$(cat VERSION) bun run build
