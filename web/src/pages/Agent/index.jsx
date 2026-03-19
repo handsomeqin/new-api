@@ -80,7 +80,12 @@ const AgentPage = () => {
       const userStr = localStorage.getItem('user');
       let affCode = 'guest';
       
-      if (userStr) {
+      // 首先尝试从agentInfo获取AffCode
+      if (agentInfo?.AffCode) {
+        affCode = agentInfo.AffCode;
+      } 
+      // 然后尝试从本地存储获取用户信息
+      else if (userStr) {
         try {
           const user = JSON.parse(userStr);
           if (user && user.aff_code) {
@@ -93,11 +98,6 @@ const AgentPage = () => {
         } catch (e) {
           console.error('解析用户信息失败:', e);
         }
-      }
-      
-      // 如果本地存储中没有，尝试使用agentInfo中的AffCode
-      if (affCode === 'guest' && agentInfo?.AffCode) {
-        affCode = agentInfo.AffCode;
       }
       
       // 生成邀请链接，指向注册页面
