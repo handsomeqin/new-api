@@ -57,6 +57,7 @@ func GetAgentInfo(c *gin.Context) {
 		"SecondLevelQuota": user.SecondLevelQuota,
 		"ThirdLevelQuota": user.ThirdLevelQuota,
 		"UpgradeProgress": upgradeProgress,
+		"AffCode":         user.AffCode,
 	})
 }
 
