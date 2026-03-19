@@ -50,6 +50,14 @@ type User struct {
 	Setting          string         `json:"setting" gorm:"type:text;column:setting"`
 	Remark           string         `json:"remark,omitempty" gorm:"type:varchar(255)" validate:"max=255"`
 	StripeCustomer   string         `json:"stripe_customer" gorm:"type:varchar(64);column:stripe_customer;index"`
+	// 三级分销相关字段
+	AgentLevel       int            `json:"agent_level" gorm:"type:int;default:0"` // 代理级别：0-普通用户，1-一级代理，2-二级代理，3-三级代理
+	FirstLevelCount  int            `json:"first_level_count" gorm:"type:int;default:0"` // 一级团队成员数量
+	SecondLevelCount int            `json:"second_level_count" gorm:"type:int;default:0"` // 二级团队成员数量
+	ThirdLevelCount  int            `json:"third_level_count" gorm:"type:int;default:0"` // 三级团队成员数量
+	FirstLevelQuota  int            `json:"first_level_quota" gorm:"type:int;default:0"` // 一级团队贡献的额度
+	SecondLevelQuota int            `json:"second_level_quota" gorm:"type:int;default:0"` // 二级团队贡献的额度
+	ThirdLevelQuota  int            `json:"third_level_quota" gorm:"type:int;default:0"` // 三级团队贡献的额度
 }
 
 func (user *User) ToBaseUser() *UserBase {
@@ -329,13 +337,109 @@ func HardDeleteUserById(id int) error {
 }
 
 func inviteUser(inviterId int) (err error) {
-	user, err := GetUserById(inviterId, true)
-	if err != nil {
-		return err
+	// 定义三级分销奖励比例
+	const (
+		firstLevelReward  = 10 // 一级代理奖励比例（%）
+		secondLevelReward = 5  // 二级代理奖励比例（%）
+		thirdLevelReward  = 2  // 三级代理奖励比例（%）
+	)
+
+	// 计算各级奖励额度
+	firstLevelQuota  := (common.QuotaForInviter * firstLevelReward) / 100
+	secondLevelQuota := (common.QuotaForInviter * secondLevelReward) / 100
+	thirdLevelQuota  := (common.QuotaForInviter * thirdLevelReward) / 100
+
+	// 处理一级代理
+	if inviterId > 0 {
+		firstLevelUser, err := GetUserById(inviterId, true)
+		if err == nil {
+			// 更新一级代理的团队信息
+			firstLevelUser.AffCount++
+			firstLevelUser.FirstLevelCount++
+			firstLevelUser.AffQuota += firstLevelQuota
+			firstLevelUser.AffHistoryQuota += firstLevelQuota
+			firstLevelUser.FirstLevelQuota += firstLevelQuota
+
+			// 更新一级代理级别
+			updateAgentLevel(firstLevelUser)
+
+			// 保存一级代理信息
+			if err := DB.Save(firstLevelUser).Error; err != nil {
+				common.SysLog("保存一级代理信息失败: " + err.Error())
+			}
+
+			// 处理二级代理
+			if firstLevelUser.InviterId > 0 {
+				secondLevelUser, err := GetUserById(firstLevelUser.InviterId, true)
+				if err == nil {
+					// 更新二级代理的团队信息
+					secondLevelUser.SecondLevelCount++
+					secondLevelUser.AffQuota += secondLevelQuota
+					secondLevelUser.AffHistoryQuota += secondLevelQuota
+					secondLevelUser.SecondLevelQuota += secondLevelQuota
+
+					// 更新二级代理级别
+					updateAgentLevel(secondLevelUser)
+
+					// 保存二级代理信息
+					if err := DB.Save(secondLevelUser).Error; err != nil {
+						common.SysLog("保存二级代理信息失败: " + err.Error())
+					}
+
+					// 处理三级代理
+					if secondLevelUser.InviterId > 0 {
+						thirdLevelUser, err := GetUserById(secondLevelUser.InviterId, true)
+						if err == nil {
+							// 更新三级代理的团队信息
+							thirdLevelUser.ThirdLevelCount++
+							thirdLevelUser.AffQuota += thirdLevelQuota
+							thirdLevelUser.AffHistoryQuota += thirdLevelQuota
+							thirdLevelUser.ThirdLevelQuota += thirdLevelQuota
+
+							// 更新三级代理级别
+							updateAgentLevel(thirdLevelUser)
+
+							// 保存三级代理信息
+							if err := DB.Save(thirdLevelUser).Error; err != nil {
+								common.SysLog("保存三级代理信息失败: " + err.Error())
+							}
+						}
+					}
+				}
+			}
+		}
 	}
-	user.AffCount++
-	user.AffQuota += common.QuotaForInviter
-	user.AffHistoryQuota += common.QuotaForInviter
+
+	return nil
+}
+
+// updateAgentLevel 根据团队成员数量更新代理级别
+func updateAgentLevel(user *User) {
+	// 定义代理级别条件
+	const (
+		firstLevelCondition  = 5  // 一级代理需要的一级团队成员数量
+		secondLevelCondition = 20 // 二级代理需要的一级团队成员数量
+		thirdLevelCondition  = 100 // 三级代理需要的一级团队成员数量
+	)
+
+	// 根据一级团队成员数量更新代理级别
+	if user.FirstLevelCount >= thirdLevelCondition {
+		user.AgentLevel = 3 // 三级代理
+	} else if user.FirstLevelCount >= secondLevelCondition {
+		user.AgentLevel = 2 // 二级代理
+	} else if user.FirstLevelCount >= firstLevelCondition {
+		user.AgentLevel = 1 // 一级代理
+	} else {
+		user.AgentLevel = 0 // 普通用户
+	}
+}
+
+// UpdateAgentLevel 根据团队成员数量更新代理级别并保存到数据库
+func UpdateAgentLevel(user *User) error {
+	// 更新代理级别
+	updateAgentLevel(user)
+	
+	// 保存到数据库
 	return DB.Save(user).Error
 }
 

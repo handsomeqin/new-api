@@ -44,6 +44,10 @@ export const DEFAULT_ADMIN_CONFIG = {
     topup: true,
     personal: true,
   },
+  agent: {
+    enabled: true,
+    agent: true,
+  },
   admin: {
     enabled: true,
     channel: true,

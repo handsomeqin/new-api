@@ -369,5 +369,16 @@ func SetApiRouter(router *gin.Engine) {
 			deploymentsRoute.POST("/:id/extend", controller.ExtendDeployment)
 			deploymentsRoute.DELETE("/:id", controller.DeleteDeployment)
 		}
+
+		// Agent management routes
+		agentRoute := apiRouter.Group("/agent")
+		agentRoute.Use(middleware.UserAuth())
+		{
+			agentRoute.GET("/info", controller.GetAgentInfo)
+			agentRoute.GET("/team", controller.GetTeamMembers)
+			agentRoute.GET("/rewards", controller.GetAgentRewards)
+			agentRoute.GET("/invite-link", controller.GetAgentInviteLink)
+			agentRoute.POST("/upgrade", controller.UpgradeAgentLevel)
+		}
 	}
 }

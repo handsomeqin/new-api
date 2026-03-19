@@ -49,6 +49,7 @@ const routerMap = {
   deployment: '/console/deployment',
   playground: '/console/playground',
   personal: '/console/personal',
+  agent: '/console/agent',
 };
 
 const SiderBar = ({ onNavigate = () => {} }) => {
@@ -144,6 +145,19 @@ const SiderBar = ({ onNavigate = () => {} }) => {
 
     return filteredItems;
   }, [t, isModuleVisible]);
+
+  const agentItems = useMemo(() => {
+    const items = [
+      {
+        text: t('代理管理'),
+        itemKey: 'agent',
+        to: '/console/agent',
+      },
+    ];
+
+    // 代理管理始终显示，不需要根据配置过滤
+    return items;
+  }, [t]);
 
   const adminItems = useMemo(() => {
     const items = [
@@ -474,6 +488,17 @@ const SiderBar = ({ onNavigate = () => {} }) => {
               </div>
             </>
           )}
+
+          {/* 代理管理区域 */}
+          <>
+            <Divider className='sidebar-divider' />
+            <div>
+              {!collapsed && (
+                <div className='sidebar-group-label'>{t('代理管理')}</div>
+              )}
+              {agentItems.map((item) => renderNavItem(item))}
+            </div>
+          </>
 
           {/* 管理员区域 - 只在管理员时显示且配置允许时显示 */}
           {isAdmin() && hasSectionVisibleModules('admin') && (

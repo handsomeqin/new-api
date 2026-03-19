@@ -74,8 +74,32 @@ const Home = () => {
 
   // 生成邀请链接
   const generateInviteLink = () => {
-    const userId = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).id : 'guest';
-    return `${window.location.origin}?aff=${userId}`;
+    try {
+      // 尝试从本地存储获取用户信息
+      const userStr = localStorage.getItem('user');
+      let affCode = 'guest';
+      
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          if (user && user.aff_code) {
+            affCode = user.aff_code;
+          } else if (user && user.id) {
+            affCode = user.id;
+          } else if (user && user.username) {
+            affCode = user.username;
+          }
+        } catch (e) {
+          console.error('解析用户信息失败:', e);
+        }
+      }
+      
+      // 生成邀请链接，指向注册页面
+      return `${window.location.origin}/register?aff=${encodeURIComponent(affCode)}`;
+    } catch (e) {
+      console.error('生成邀请链接失败:', e);
+      return `${window.location.origin}/register?aff=guest`;
+    }
   };
 
   const displayHomePageContent = async () => {
@@ -105,6 +129,37 @@ const Home = () => {
       setHomePageContent('加载首页内容失败...');
     }
     setHomePageContentLoaded(true);
+  };
+
+  // 获取用户信息和真实的 API 密钥
+  const fetchUserInfo = async () => {
+    try {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        if (user && user.token) {
+          // 获取用户的 API 密钥
+          const tokensRes = await API.get('/api/token');
+          if (tokensRes.data.success && tokensRes.data.data && tokensRes.data.data.length > 0) {
+            // 使用第一个令牌作为默认密钥
+            setGeneratedKey(tokensRes.data.data[0].key);
+            localStorage.setItem('openclaw_key', tokensRes.data.data[0].key);
+          }
+          
+          // 获取用户的详细信息，确保 aff_code 是最新的
+          const userRes = await API.get('/api/user/self');
+          if (userRes.data.success && userRes.data.data) {
+            const userData = userRes.data.data;
+            // 确保邀请链接使用真实的 aff_code
+            if (userData.aff_code) {
+              setInviteLink(`${window.location.origin}/register?aff=${encodeURIComponent(userData.aff_code)}`);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('获取用户信息失败:', error);
+    }
   };
 
   const handleCopyBaseURL = async () => {
@@ -156,20 +211,63 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    // 先显示页面，再加载内容
+    setHomePageContentLoaded(true);
+    
+    // 异步加载首页内容
     displayHomePageContent().then();
     
-    // 检查本地存储是否已有密钥，如果没有则生成新的
-    const storedKey = localStorage.getItem('openclaw_key');
-    if (!storedKey) {
-      const newKey = generateRandomKey();
-      setGeneratedKey(newKey);
-      localStorage.setItem('openclaw_key', newKey);
+    // 检查用户是否登录，优先获取真实数据
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        if (user && user.token) {
+          // 用户已登录，获取真实数据
+          fetchUserInfo().then();
+        } else {
+          // 用户未登录，使用本地存储或生成随机数据
+          const storedKey = localStorage.getItem('openclaw_key');
+          if (!storedKey) {
+            const newKey = generateRandomKey();
+            setGeneratedKey(newKey);
+            localStorage.setItem('openclaw_key', newKey);
+          } else {
+            setGeneratedKey(storedKey);
+          }
+          
+          // 生成邀请链接
+          setInviteLink(generateInviteLink());
+        }
+      } catch (e) {
+        console.error('解析用户信息失败:', e);
+        // 解析失败，使用本地存储或生成随机数据
+        const storedKey = localStorage.getItem('openclaw_key');
+        if (!storedKey) {
+          const newKey = generateRandomKey();
+          setGeneratedKey(newKey);
+          localStorage.setItem('openclaw_key', newKey);
+        } else {
+          setGeneratedKey(storedKey);
+        }
+        
+        // 生成邀请链接
+        setInviteLink(generateInviteLink());
+      }
     } else {
-      setGeneratedKey(storedKey);
+      // 未登录，使用本地存储或生成随机数据
+      const storedKey = localStorage.getItem('openclaw_key');
+      if (!storedKey) {
+        const newKey = generateRandomKey();
+        setGeneratedKey(newKey);
+        localStorage.setItem('openclaw_key', newKey);
+      } else {
+        setGeneratedKey(storedKey);
+      }
+      
+      // 生成邀请链接
+      setInviteLink(generateInviteLink());
     }
-    
-    // 生成邀请链接
-    setInviteLink(generateInviteLink());
   }, []);
 
   useEffect(() => {
