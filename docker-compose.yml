@@ -96,4 +96,8 @@ services:
 
 volumes:
   pg_data:
+<<<<<<< HEAD
 #  mysql_data:
+=======
+#  mysql_data:
+>>>>>>> 65d95646e09f46ec74e556a1247d2dd53d267daf
