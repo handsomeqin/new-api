@@ -63,15 +63,58 @@ func GetAgentInfo(c *gin.Context) {
 
 // GetTeamMembers 获取团队成员
 func GetTeamMembers(c *gin.Context) {
-	_, exists := c.Get(string(constant.ContextKeyUserId))
+	userID, exists := c.Get(string(constant.ContextKeyUserId))
 	if !exists {
 		c.JSON(401, gin.H{"error": "未授权"})
 		return
 	}
 
-	// 这里需要实现获取团队成员的逻辑
-	// 暂时返回空数组，后续需要根据实际情况实现
-	c.JSON(200, []gin.H{})
+	// 获取当前用户的所有团队成员
+	var teamMembers []gin.H
+
+	// 获取一级团队成员
+	firstLevelUsers, err := model.GetUsersByInviterId(userID.(int))
+	if err == nil {
+		for _, user := range firstLevelUsers {
+			teamMembers = append(teamMembers, gin.H{
+				"id":           user.Id,
+				"username":     user.Username,
+				"level":        user.AgentLevel,
+				"relation":     1, // 1表示一级
+				"contribution": user.FirstLevelQuota, // 贡献额度
+			})
+
+			// 获取二级团队成员
+			secondLevelUsers, err := model.GetUsersByInviterId(user.Id)
+			if err == nil {
+				for _, secondUser := range secondLevelUsers {
+					teamMembers = append(teamMembers, gin.H{
+						"id":           secondUser.Id,
+						"username":     secondUser.Username,
+						"level":        secondUser.AgentLevel,
+						"relation":     2, // 2表示二级
+						"contribution": secondUser.SecondLevelQuota, // 贡献额度
+					})
+
+					// 获取三级团队成员
+					thirdLevelUsers, err := model.GetUsersByInviterId(secondUser.Id)
+					if err == nil {
+						for _, thirdUser := range thirdLevelUsers {
+							teamMembers = append(teamMembers, gin.H{
+								"id":           thirdUser.Id,
+								"username":     thirdUser.Username,
+								"level":        thirdUser.AgentLevel,
+								"relation":     3, // 3表示三级
+								"contribution": thirdUser.ThirdLevelQuota, // 贡献额度
+							})
+						}
+					}
+				}
+			}
+		}
+	}
+
+	c.JSON(200, teamMembers)
 }
 
 // GetAgentRewards 获取代理收益记录

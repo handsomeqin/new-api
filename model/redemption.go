@@ -148,7 +148,81 @@ func Redeem(key string, userId int) (quota int, err error) {
 		redemption.Status = common.RedemptionCodeStatusUsed
 		redemption.UsedUserId = userId
 		err = tx.Save(redemption).Error
-		return err
+		if err != nil {
+			return err
+		}
+
+		// 处理代理收益
+		// 1. 获取当前用户
+		var user User
+		if err := tx.First(&user, "id = ?", userId).Error; err != nil {
+			return err
+		}
+
+		// 2. 计算代理收益
+		if user.InviterId > 0 {
+			// 定义代理收益比例
+			const (
+				firstLevelReward  = 10  // 一级代理奖励比例（%）
+				secondLevelReward = 5   // 二级代理奖励比例（%）
+				thirdLevelReward  = 3   // 三级代理奖励比例（%）
+			)
+
+			// 计算各级奖励额度
+			firstLevelQuota  := (redemption.Quota * firstLevelReward) / 100
+			secondLevelQuota := (redemption.Quota * secondLevelReward) / 100
+			thirdLevelQuota  := (redemption.Quota * thirdLevelReward) / 100
+
+			// 处理一级代理
+			if user.InviterId > 0 {
+				var firstLevelUser User
+				if err := tx.First(&firstLevelUser, "id = ?", user.InviterId).Error; err == nil {
+					// 更新一级代理的收益
+					firstLevelUser.AffQuota += firstLevelQuota
+					firstLevelUser.AffHistoryQuota += firstLevelQuota
+					firstLevelUser.FirstLevelQuota += firstLevelQuota
+
+					// 保存一级代理信息
+					if err := tx.Save(&firstLevelUser).Error; err != nil {
+						common.SysLog("保存一级代理信息失败: " + err.Error())
+					}
+
+					// 处理二级代理
+					if firstLevelUser.InviterId > 0 {
+						var secondLevelUser User
+						if err := tx.First(&secondLevelUser, "id = ?", firstLevelUser.InviterId).Error; err == nil {
+							// 更新二级代理的收益
+							secondLevelUser.AffQuota += secondLevelQuota
+							secondLevelUser.AffHistoryQuota += secondLevelQuota
+							secondLevelUser.SecondLevelQuota += secondLevelQuota
+
+							// 保存二级代理信息
+							if err := tx.Save(&secondLevelUser).Error; err != nil {
+								common.SysLog("保存二级代理信息失败: " + err.Error())
+							}
+
+							// 处理三级代理
+							if secondLevelUser.InviterId > 0 {
+								var thirdLevelUser User
+								if err := tx.First(&thirdLevelUser, "id = ?", secondLevelUser.InviterId).Error; err == nil {
+									// 更新三级代理的收益
+									thirdLevelUser.AffQuota += thirdLevelQuota
+									thirdLevelUser.AffHistoryQuota += thirdLevelQuota
+									thirdLevelUser.ThirdLevelQuota += thirdLevelQuota
+
+									// 保存三级代理信息
+									if err := tx.Save(&thirdLevelUser).Error; err != nil {
+										common.SysLog("保存三级代理信息失败: " + err.Error())
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return nil
 	})
 	if err != nil {
 		common.SysError("redemption failed: " + err.Error())

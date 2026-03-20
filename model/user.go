@@ -1161,3 +1161,10 @@ func RootUserExists() bool {
 	}
 	return true
 }
+
+// GetUsersByInviterId 根据邀请人ID获取用户列表
+func GetUsersByInviterId(inviterId int) ([]*User, error) {
+	var users []*User
+	err := DB.Where("inviter_id = ?", inviterId).Omit("password").Find(&users).Error
+	return users, err
+}
