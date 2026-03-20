@@ -58,16 +58,7 @@ const HeaderLogo = ({
             {systemName}
           </div>
         </SkeletonWrapper>
-        <SkeletonWrapper
-          loading={isLoading}
-          type='text'
-          width={100}
-          height={12}
-        >
-          <div className='logo-sub text-10 tracking-[8px] text-[rgba(255,255,255,0.4)] mt-1'>
-            NEW API
-          </div>
-        </SkeletonWrapper>
+
         {(isSelfUseMode || isDemoSiteMode) && !isLoading && (
           <Tag
             color={isSelfUseMode ? 'purple' : 'blue'}
