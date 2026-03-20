@@ -91,6 +91,76 @@ func Recharge(referenceId string, customerId string) (err error) {
 			return err
 		}
 
+		// 处理代理收益
+		// 1. 获取当前用户
+		var user User
+		if err := tx.First(&user, "id = ?", topUp.UserId).Error; err != nil {
+			return err
+		}
+
+		// 2. 计算代理收益
+		if user.InviterId > 0 {
+			// 定义代理收益比例
+			const (
+				firstLevelReward  = 10  // 一级代理奖励比例（%）
+				secondLevelReward = 5   // 二级代理奖励比例（%）
+				thirdLevelReward  = 3   // 三级代理奖励比例（%）
+			)
+
+			// 计算各级奖励额度
+			firstLevelQuota  := int((quota * float64(firstLevelReward)) / 100)
+			secondLevelQuota := int((quota * float64(secondLevelReward)) / 100)
+			thirdLevelQuota  := int((quota * float64(thirdLevelReward)) / 100)
+
+			// 处理一级代理
+			if user.InviterId > 0 {
+				var firstLevelUser User
+				if err := tx.First(&firstLevelUser, "id = ?", user.InviterId).Error; err == nil {
+					// 更新一级代理的收益
+					firstLevelUser.AffQuota += firstLevelQuota
+					firstLevelUser.AffHistoryQuota += firstLevelQuota
+					firstLevelUser.FirstLevelQuota += firstLevelQuota
+
+					// 保存一级代理信息
+					if err := tx.Save(&firstLevelUser).Error; err != nil {
+						common.SysLog("保存一级代理信息失败: " + err.Error())
+					}
+
+					// 处理二级代理
+					if firstLevelUser.InviterId > 0 {
+						var secondLevelUser User
+						if err := tx.First(&secondLevelUser, "id = ?", firstLevelUser.InviterId).Error; err == nil {
+							// 更新二级代理的收益
+							secondLevelUser.AffQuota += secondLevelQuota
+							secondLevelUser.AffHistoryQuota += secondLevelQuota
+							secondLevelUser.SecondLevelQuota += secondLevelQuota
+
+							// 保存二级代理信息
+							if err := tx.Save(&secondLevelUser).Error; err != nil {
+								common.SysLog("保存二级代理信息失败: " + err.Error())
+							}
+
+							// 处理三级代理
+							if secondLevelUser.InviterId > 0 {
+								var thirdLevelUser User
+								if err := tx.First(&thirdLevelUser, "id = ?", secondLevelUser.InviterId).Error; err == nil {
+									// 更新三级代理的收益
+									thirdLevelUser.AffQuota += thirdLevelQuota
+									thirdLevelUser.AffHistoryQuota += thirdLevelQuota
+									thirdLevelUser.ThirdLevelQuota += thirdLevelQuota
+
+									// 保存三级代理信息
+									if err := tx.Save(&thirdLevelUser).Error; err != nil {
+										common.SysLog("保存三级代理信息失败: " + err.Error())
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
 		return nil
 	})
 
@@ -293,6 +363,76 @@ func ManualCompleteTopUp(tradeNo string) error {
 			return err
 		}
 
+		// 处理代理收益
+		// 1. 获取当前用户
+		var user User
+		if err := tx.First(&user, "id = ?", topUp.UserId).Error; err != nil {
+			return err
+		}
+
+		// 2. 计算代理收益
+		if user.InviterId > 0 {
+			// 定义代理收益比例
+			const (
+				firstLevelReward  = 10  // 一级代理奖励比例（%）
+				secondLevelReward = 5   // 二级代理奖励比例（%）
+				thirdLevelReward  = 3   // 三级代理奖励比例（%）
+			)
+
+			// 计算各级奖励额度
+			firstLevelQuota  := int((float64(quotaToAdd) * float64(firstLevelReward)) / 100)
+			secondLevelQuota := int((float64(quotaToAdd) * float64(secondLevelReward)) / 100)
+			thirdLevelQuota  := int((float64(quotaToAdd) * float64(thirdLevelReward)) / 100)
+
+			// 处理一级代理
+			if user.InviterId > 0 {
+				var firstLevelUser User
+				if err := tx.First(&firstLevelUser, "id = ?", user.InviterId).Error; err == nil {
+					// 更新一级代理的收益
+					firstLevelUser.AffQuota += firstLevelQuota
+					firstLevelUser.AffHistoryQuota += firstLevelQuota
+					firstLevelUser.FirstLevelQuota += firstLevelQuota
+
+					// 保存一级代理信息
+					if err := tx.Save(&firstLevelUser).Error; err != nil {
+						common.SysLog("保存一级代理信息失败: " + err.Error())
+					}
+
+					// 处理二级代理
+					if firstLevelUser.InviterId > 0 {
+						var secondLevelUser User
+						if err := tx.First(&secondLevelUser, "id = ?", firstLevelUser.InviterId).Error; err == nil {
+							// 更新二级代理的收益
+							secondLevelUser.AffQuota += secondLevelQuota
+							secondLevelUser.AffHistoryQuota += secondLevelQuota
+							secondLevelUser.SecondLevelQuota += secondLevelQuota
+
+							// 保存二级代理信息
+							if err := tx.Save(&secondLevelUser).Error; err != nil {
+								common.SysLog("保存二级代理信息失败: " + err.Error())
+							}
+
+							// 处理三级代理
+							if secondLevelUser.InviterId > 0 {
+								var thirdLevelUser User
+								if err := tx.First(&thirdLevelUser, "id = ?", secondLevelUser.InviterId).Error; err == nil {
+									// 更新三级代理的收益
+									thirdLevelUser.AffQuota += thirdLevelQuota
+									thirdLevelUser.AffHistoryQuota += thirdLevelQuota
+									thirdLevelUser.ThirdLevelQuota += thirdLevelQuota
+
+									// 保存三级代理信息
+									if err := tx.Save(&thirdLevelUser).Error; err != nil {
+										common.SysLog("保存三级代理信息失败: " + err.Error())
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
 		userId = topUp.UserId
 		payMoney = topUp.Money
 		return nil
@@ -362,6 +502,76 @@ func RechargeCreem(referenceId string, customerEmail string, customerName string
 		err = tx.Model(&User{}).Where("id = ?", topUp.UserId).Updates(updateFields).Error
 		if err != nil {
 			return err
+		}
+
+		// 处理代理收益
+		// 1. 获取当前用户
+		var user User
+		if err := tx.First(&user, "id = ?", topUp.UserId).Error; err != nil {
+			return err
+		}
+
+		// 2. 计算代理收益
+		if user.InviterId > 0 {
+			// 定义代理收益比例
+			const (
+				firstLevelReward  = 10  // 一级代理奖励比例（%）
+				secondLevelReward = 5   // 二级代理奖励比例（%）
+				thirdLevelReward  = 3   // 三级代理奖励比例（%）
+			)
+
+			// 计算各级奖励额度
+			firstLevelQuota  := int((float64(quota) * float64(firstLevelReward)) / 100)
+			secondLevelQuota := int((float64(quota) * float64(secondLevelReward)) / 100)
+			thirdLevelQuota  := int((float64(quota) * float64(thirdLevelReward)) / 100)
+
+			// 处理一级代理
+			if user.InviterId > 0 {
+				var firstLevelUser User
+				if err := tx.First(&firstLevelUser, "id = ?", user.InviterId).Error; err == nil {
+					// 更新一级代理的收益
+					firstLevelUser.AffQuota += firstLevelQuota
+					firstLevelUser.AffHistoryQuota += firstLevelQuota
+					firstLevelUser.FirstLevelQuota += firstLevelQuota
+
+					// 保存一级代理信息
+					if err := tx.Save(&firstLevelUser).Error; err != nil {
+						common.SysLog("保存一级代理信息失败: " + err.Error())
+					}
+
+					// 处理二级代理
+					if firstLevelUser.InviterId > 0 {
+						var secondLevelUser User
+						if err := tx.First(&secondLevelUser, "id = ?", firstLevelUser.InviterId).Error; err == nil {
+							// 更新二级代理的收益
+							secondLevelUser.AffQuota += secondLevelQuota
+							secondLevelUser.AffHistoryQuota += secondLevelQuota
+							secondLevelUser.SecondLevelQuota += secondLevelQuota
+
+							// 保存二级代理信息
+							if err := tx.Save(&secondLevelUser).Error; err != nil {
+								common.SysLog("保存二级代理信息失败: " + err.Error())
+							}
+
+							// 处理三级代理
+							if secondLevelUser.InviterId > 0 {
+								var thirdLevelUser User
+								if err := tx.First(&thirdLevelUser, "id = ?", secondLevelUser.InviterId).Error; err == nil {
+									// 更新三级代理的收益
+									thirdLevelUser.AffQuota += thirdLevelQuota
+									thirdLevelUser.AffHistoryQuota += thirdLevelQuota
+									thirdLevelUser.ThirdLevelQuota += thirdLevelQuota
+
+									// 保存三级代理信息
+									if err := tx.Save(&thirdLevelUser).Error; err != nil {
+										common.SysLog("保存三级代理信息失败: " + err.Error())
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
 		return nil
