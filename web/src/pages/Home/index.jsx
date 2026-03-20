@@ -297,11 +297,13 @@ const Home = () => {
           <main className="relative z-10 pt-20 min-h-screen flex flex-col items-center justify-center">
             <div className="hero text-center max-w-4xl px-4">
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-900 leading-tight mb-6">
-                智能算力
-                <span className="block text-3xl md:text-4xl mt-4">触手可及</span>
+                云基算力
               </h1>
-              <p className="text-lg md:text-xl text-gray-400 mb-8 tracking-wider">
-                {t('企业级 AI API Token | 高性能 GPU 算力 | 专业模型微调服务')}
+              <p className="text-lg md:text-xl text-primary mb-4 font-semibold">
+                云为基石，算力可信，安心至上
+              </p>
+              <p className="text-md md:text-lg text-gray-400 mb-8 tracking-wider">
+                稳健筑基，数字安心，专业可信赖
               </p>
               
               {/* BASE URL 与端点选择 */}
@@ -378,154 +380,238 @@ const Home = () => {
               </div>
             </div>
 
-            {/* OpenClaw 龙虾快捷使用指南 */}
+            {/* 品牌简介 */}
             <div className="max-w-6xl w-full px-4 mt-20">
               <Card className="with-pastel-balls">
                 <div className="p-6">
-                  <h2 className="text-3xl font-700 mb-6 text-primary">OpenClaw 龙虾快捷使用指南</h2>
+                  <h2 className="text-3xl font-700 mb-6 text-primary">关于云基算力</h2>
+                  <p className="text-lg mb-8">
+                    云基算力，是专注数字服务与权益流通的合规服务平台，秉持安全、透明、稳健的运营理念，依托硬核技术实力与专业科研背景，构建高标准、高安全、高公信力的服务体系。平台以基础设施级稳定架构，打造便捷、可靠、放心的使用环境，坚守合规底线，保障用户权益，做全民信赖的数字服务平台。
+                  </p>
+                </div>
+              </Card>
+            </div>
+
+            {/* 为什么选择云基算力 */}
+            <div className="max-w-6xl w-full px-4 mt-20">
+              <Card className="with-pastel-balls">
+                <div className="p-6">
+                  <h2 className="text-3xl font-700 mb-8 text-primary">为什么选择云基算力？</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <h3 className="text-xl font-600 mb-4 flex items-center gap-2">
-                        <IconKey />
-                        快速配置
+                    <div className="bg-gray-900 p-6 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        🏛️ 科研背书
                       </h3>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-2">API 地址</label>
-                          <div className="flex gap-2">
-                            <Input
-                              value={openclawUrl}
-                              onChange={setOpenclawUrl}
-                              className="flex-1"
-                            />
-                            <Button
-                              type="primary"
-                              onClick={() => copy(openclawUrl).then(() => showSuccess('已复制地址到剪切板'))}
-                              icon={<IconCopy />}
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-2">密钥令牌</label>
-                          <div className="flex gap-2">
-                            <Input
-                              value={generatedKey}
-                              readOnly
-                              className="flex-1"
-                            />
-                            <Button
-                              type="primary"
-                              onClick={handleCopyKey}
-                              icon={<IconCopy />}
-                            />
-                            <Button
-                              onClick={regenerateKey}
-                              icon={<IconKey />}
-                            />
-                          </div>
-                        </div>
-                        <p className="text-sm text-gray-400 mt-4">
-                          输入以上 API 地址和密钥，即可快速使用 OpenClaw 龙虾服务。
-                        </p>
-                      </div>
+                      <ul className="list-disc list-inside text-sm space-y-2 text-gray-300">
+                        <li>依托浙江大学计算机创新研究院</li>
+                        <li>专业团队研发，品质有保障</li>
+                      </ul>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-600 mb-4 flex items-center gap-2">
-                        <IconGift />
-                        邀请奖励
+                    <div className="bg-gray-900 p-6 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        🔒 超算级安全
                       </h3>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-2">邀请链接</label>
-                          <div className="flex gap-2">
-                            <Input
-                              value={inviteLink}
-                              readOnly
-                              className="flex-1"
-                            />
-                            <Button
-                              type="primary"
-                              onClick={handleCopyInviteLink}
-                              icon={<IconCopy />}
-                            />
-                          </div>
-                        </div>
-                        <div className="bg-primary/10 p-4 rounded-lg">
-                          <h4 className="font-600 mb-2">邀请奖励规则</h4>
-                          <ul className="list-disc list-inside text-sm space-y-2">
-                            <li>邀请新用户注册并使用服务</li>
-                            <li>双方均可获得 10% 的收益奖励</li>
-                            <li>奖励自动发放到账户余额</li>
-                          </ul>
-                        </div>
-                      </div>
+                      <ul className="list-disc list-inside text-sm space-y-2 text-gray-300">
+                        <li>对标国家超算安全标准</li>
+                        <li>多重加密，保障资产安全</li>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-900 p-6 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        📜 合规透明
+                      </h3>
+                      <ul className="list-disc list-inside text-sm space-y-2 text-gray-300">
+                        <li>坚守合规底线，流程公开透明</li>
+                        <li>无隐形消费，放心选购</li>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-900 p-6 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        🎯 优质Token
+                      </h3>
+                      <ul className="list-disc list-inside text-sm space-y-2 text-gray-300">
+                        <li>严格筛选，品质过关</li>
+                        <li>稳定可靠，性价比优选</li>
+                      </ul>
                     </div>
                   </div>
                 </div>
               </Card>
             </div>
 
-            {/* 产品卡片 */}
-            <div className="products grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl w-full px-4 mt-20">
+            {/* 限时专属优惠 */}
+            <div className="max-w-6xl w-full px-4 mt-20">
+              <Card className="with-pastel-balls bg-gradient-to-r from-blue-900 to-purple-900">
+                <div className="p-6">
+                  <h2 className="text-3xl font-700 mb-6 text-white">限时专属优惠</h2>
+                  <p className="text-xl mb-8 text-yellow-300 font-semibold">错过再等一年！手慢无！</p>
+                  <div className="space-y-4">
+                    <div className="bg-white/10 p-4 rounded-lg">
+                      <h3 className="font-semibold mb-2 text-white">活动1：注册送Token</h3>
+                      <p className="text-sm text-gray-200">新用户注册即送1000万Token，一周内有效！</p>
+                    </div>
+                    <div className="bg-white/10 p-4 rounded-lg">
+                      <h3 className="font-semibold mb-2 text-white">活动2：充值优惠</h3>
+                      <p className="text-sm text-gray-200">充的多送的多，换算后比其他平台便宜一半，贵就赔！</p>
+                    </div>
+                    <div className="bg-white/10 p-4 rounded-lg">
+                      <h3 className="font-semibold mb-2 text-white">活动3：邀请有礼</h3>
+                      <p className="text-sm text-gray-200">邀请好友注册送100万Token，佣金10%！</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-300 mt-6">活动时间：2026年3月20日 - 2026年5月1日 | 最终解释权归云基算力所有</p>
+                </div>
+              </Card>
+            </div>
+
+            {/* 代理销售 */}
+            <div className="max-w-6xl w-full px-4 mt-20">
+              <Card className="with-pastel-balls">
+                <div className="p-6">
+                  <h2 className="text-3xl font-700 mb-8 text-primary">代理销售 · 共赢未来</h2>
+                  <p className="text-lg mb-8">零门槛、高佣金、强支持，诚邀各界合作伙伴，携手共创收益</p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-gray-900 p-6 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        🚪 零门槛代理
+                      </h3>
+                      <ul className="list-disc list-inside text-sm space-y-2 text-gray-300">
+                        <li>无需押金、无需经验</li>
+                        <li>个人/企业均可申请，轻松起步</li>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-900 p-6 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        💰 高佣金回报
+                      </h3>
+                      <ul className="list-disc list-inside text-sm space-y-2 text-gray-300">
+                        <li>佣金比例高达15%-30%</li>
+                        <li>销量越高，佣金越高，上不封顶</li>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-900 p-6 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        🤝 全方位支持
+                      </h3>
+                      <ul className="list-disc list-inside text-sm space-y-2 text-gray-300">
+                        <li>提供宣传物料、专属客服</li>
+                        <li>实时结算，售后无忧</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="flex flex-col md:flex-row gap-4 mt-8">
+                    <Link to="/console/agent">
+                      <Button
+                        theme="solid"
+                        type="primary"
+                        size="large"
+                        className="rounded-3xl px-8 py-2"
+                      >
+                        立即申请代理
+                      </Button>
+                    </Link>
+                    <Link to="/console/agent">
+                      <Button
+                        theme="borderless"
+                        type="primary"
+                        size="large"
+                        className="rounded-3xl px-8 py-2"
+                      >
+                        查看代理详情
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* 安全保障 */}
+            <div className="max-w-6xl w-full px-4 mt-20">
+              <Card className="with-pastel-balls">
+                <div className="p-6">
+                  <h2 className="text-3xl font-700 mb-8 text-primary">安全保障 · 放心托付</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="bg-gray-900 p-6 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        🔐 技术加密
+                      </h3>
+                      <ul className="list-disc list-inside text-sm space-y-2 text-gray-300">
+                        <li>银行级加密技术</li>
+                        <li>保障交易安全</li>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-900 p-6 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        📜 合规运营
+                      </h3>
+                      <ul className="list-disc list-inside text-sm space-y-2 text-gray-300">
+                        <li>资质齐全，合规备案</li>
+                        <li>全程透明可追溯</li>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-900 p-6 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        👁️ 实时监控
+                      </h3>
+                      <ul className="list-disc list-inside text-sm space-y-2 text-gray-300">
+                        <li>24小时实时监控</li>
+                        <li>及时防范风险</li>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-900 p-6 rounded-lg">
+                      <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        📞 专属客服
+                      </h3>
+                      <ul className="list-disc list-inside text-sm space-y-2 text-gray-300">
+                        <li>7×24小时在线</li>
+                        <li>及时响应需求</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* 优质Token产品 */}
+            <div className="products grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full px-4 mt-20">
               <div className="product-card">
-                <span className="product-icon">🔥</span>
-                <h3 className="text-22 mb-4">GPT-4o Token</h3>
+                <span className="product-icon">⭐</span>
+                <h3 className="text-22 mb-4">基础版Token</h3>
                 <p className="desc text-14 text-gray-400 mb-6 leading-relaxed">
-                  {t('OpenAI 最新模型，支持多模态，理解能力更强，响应更快')}
+                  入门优选 · 稳定可靠
                 </p>
-                <div className="price text-28 text-accent mb-2">¥1.5<span className="text-14 text-gray-400">/K tokens</span></div>
-                <a href="/console" className="btn inline-block mt-4">{t('立即购买')}</a>
+                <a href="/console" className="btn inline-block mt-4">立即购买</a>
+              </div>
+
+              <div className="product-card">
+                <span className="product-icon">🌟</span>
+                <h3 className="text-22 mb-4">进阶版Token</h3>
+                <p className="desc text-14 text-gray-400 mb-6 leading-relaxed">
+                  高性价比 · 权益升级
+                </p>
+                <a href="/console" className="btn inline-block mt-4">立即购买</a>
               </div>
 
               <div className="product-card">
                 <span className="product-icon">💎</span>
-                <h3 className="text-22 mb-4">Claude 3.5 Token</h3>
+                <h3 className="text-22 mb-4">旗舰版Token</h3>
                 <p className="desc text-14 text-gray-400 mb-6 leading-relaxed">
-                  {t('Anthropic 出品，长文本处理专家，适合复杂推理与代码生成')}
+                  顶级配置 · 专属权益
                 </p>
-                <div className="price text-28 text-accent mb-2">¥2.0<span className="text-14 text-gray-400">/K tokens</span></div>
-                <a href="/console" className="btn inline-block mt-4">{t('立即购买')}</a>
+                <a href="/console" className="btn inline-block mt-4">立即购买</a>
               </div>
-
-              <div className="product-card">
-                <span className="product-icon">⚡</span>
-                <h3 className="text-22 mb-4">Gemini Pro Token</h3>
-                <p className="desc text-14 text-gray-400 mb-6 leading-relaxed">
-                  {t('Google 多模态大模型，超大上下文窗口，性价比之选')}
-                </p>
-                <div className="price text-28 text-accent mb-2">¥0.8<span className="text-14 text-gray-400">/K tokens</span></div>
-                <a href="/console" className="btn inline-block mt-4">{t('立即购买')}</a>
-              </div>
-
-              <div className="product-card">
-                <span className="product-icon">🐲</span>
-                <h3 className="text-22 mb-4">智谱 GLM-4 Token</h3>
-                <p className="desc text-14 text-gray-400 mb-6 leading-relaxed">
-                  {t('国产大模型，性价比高，中文理解能力强，支持微调')}
-                </p>
-                <div className="price text-28 text-accent mb-2">¥0.3<span className="text-14 text-gray-400">/K tokens</span></div>
-                <a href="/console" className="btn inline-block mt-4">{t('立即购买')}</a>
-              </div>
-
-              <div className="product-card">
-                <span className="product-icon">🎨</span>
-                <h3 className="text-22 mb-4">Midjourney API</h3>
-                <p className="desc text-14 text-gray-400 mb-6 leading-relaxed">
-                  {t('AI 图像生成，支持 V6 版本，文字渲染能力大幅提升')}
-                </p>
-                <div className="price text-28 text-accent mb-2">¥3.0<span className="text-14 text-gray-400">/张</span></div>
-                <a href="/console" className="btn inline-block mt-4">{t('立即购买')}</a>
-              </div>
-
-              <div className="product-card">
-                <span className="product-icon">🔊</span>
-                <h3 className="text-22 mb-4">TTS 语音合成</h3>
-                <p className="desc text-14 text-gray-400 mb-6 leading-relaxed">
-                  {t('高质量语音输出，支持多种音色，适合有声内容创作')}
-                </p>
-                <div className="price text-28 text-accent mb-2">¥0.1<span className="text-14 text-gray-400">/千字符</span></div>
-                <a href="/console" className="btn inline-block mt-4">{t('立即购买')}</a>
-              </div>
+            </div>
+            <div className="text-center mt-8">
+              <Link to="/console">
+                <Button
+                  theme="borderless"
+                  type="primary"
+                  size="large"
+                  className="rounded-3xl px-8 py-2"
+                >
+                  查看全部产品
+                </Button>
+              </Link>
             </div>
           </main>
         </div>
