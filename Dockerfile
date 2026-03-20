@@ -23,6 +23,7 @@ ADD go.mod go.sum ./
 RUN go mod download
 
 COPY . .
+COPY ./VERSION .
 COPY --from=builder /build/dist ./web/dist
 RUN go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(cat VERSION)'" -o new-api
 
