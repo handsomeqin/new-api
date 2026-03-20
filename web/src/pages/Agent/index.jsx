@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Typography, Table, Button, Tag, Progress, Space, Tooltip, Divider, Input, Avatar, Badge, Row, Col } from '@douyinfe/semi-ui';
+import { Card, Typography, Table, Button, Tag, Progress, Space, Tooltip, Divider, Input, Avatar, Badge, Row, Col, Modal } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
-import { getAgentInfo, getTeamMembers } from '../../api/agent';
+import { getAgentInfo, getTeamMembers, getUserTopupRecords } from '../../api/agent';
 import { showError, showSuccess } from '../../helpers';
 
 const AgentPage = () => {
@@ -10,6 +10,10 @@ const AgentPage = () => {
   const [teamMembers, setTeamMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [showTopupModal, setShowTopupModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [topupRecords, setTopupRecords] = useState([]);
+  const [loadingTopup, setLoadingTopup] = useState(false);
 
   useEffect(() => {
     const fetchAgentInfo = async () => {
@@ -209,6 +213,20 @@ const AgentPage = () => {
     }
   };
 
+  const handleViewTopupRecords = async (user) => {
+    setSelectedUser(user);
+    setLoadingTopup(true);
+    try {
+      const records = await getUserTopupRecords(user.id);
+      setTopupRecords(records);
+      setShowTopupModal(true);
+    } catch (error) {
+      showError(t('获取充值记录失败'));
+    } finally {
+      setLoadingTopup(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className='loading-container'>
@@ -247,7 +265,7 @@ const AgentPage = () => {
                     <div className='stat-item'>
                       <Typography.Text type='secondary'>{t('累计收益')}</Typography.Text>
                       <Typography.Title heading={4} className='income-text'>
-                        ¥{(agentInfo?.TotalIncome || 0).toFixed(2)}
+                        ¥{(agentInfo?.TotalEarnings || 0).toFixed(2)}
                       </Typography.Title>
                     </div>
                   </div>
@@ -373,8 +391,13 @@ const AgentPage = () => {
             {
               title: t('贡献'),
               dataIndex: 'contribution',
-              render: (contribution) => (
-                <Typography.Text strong className='contribution-text'>
+              render: (contribution, record) => (
+                <Typography.Text 
+                  strong 
+                  className='contribution-text' 
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleViewTopupRecords(record)}
+                >
                   ¥{contribution || 0}
                 </Typography.Text>
               ),
@@ -430,6 +453,59 @@ const AgentPage = () => {
           </div>
         </div>
       </Card>
+
+      {/* 充值记录模态框 */}
+      <Modal
+        title={t('充值记录') + ' - ' + (selectedUser?.username || '')}
+        visible={showTopupModal}
+        onCancel={() => setShowTopupModal(false)}
+        footer={[
+          <Button key='close' onClick={() => setShowTopupModal(false)}>
+            {t('关闭')}
+          </Button>
+        ]}
+        width={800}
+      >
+        <div className='topup-records-container'>
+          {loadingTopup ? (
+            <div className='loading-container'>
+              <div className='loading-spinner'></div>
+              <Typography.Text>{t('加载中...')}</Typography.Text>
+            </div>
+          ) : topupRecords.length > 0 ? (
+            <Table
+              columns={[
+                {
+                  title: t('充值时间'),
+                  dataIndex: 'created_at',
+                },
+                {
+                  title: t('充值金额'),
+                  dataIndex: 'amount',
+                  render: (amount) => <Typography.Text>¥{amount || 0}</Typography.Text>,
+                },
+                {
+                  title: t('充值方式'),
+                  dataIndex: 'method',
+                },
+                {
+                  title: t('状态'),
+                  dataIndex: 'status',
+                  render: (status) => (
+                    <Tag color={status === 'success' ? 'green' : 'grey'}>
+                      {status === 'success' ? t('成功') : t('失败')}
+                    </Tag>
+                  ),
+                },
+              ]}
+              dataSource={topupRecords}
+              pagination={{ pageSize: 10 }}
+            />
+          ) : (
+            <Typography.Text type='secondary'>{t('暂无充值记录')}</Typography.Text>
+          )}
+        </div>
+      </Modal>
 
       <style jsx>{`
         .agent-page-container {
@@ -627,6 +703,11 @@ const AgentPage = () => {
 
         @keyframes spin {
           to { transform: rotate(360deg); }
+        }
+
+        .topup-records-container {
+          max-height: 500px;
+          overflow-y: auto;
         }
 
         @media (max-width: 768px) {
