@@ -32,11 +32,20 @@ const AgentInfo = ({ t, userState }) => {
     3: t('三级代理'),
   };
 
+  // 获取用户代理相关属性，提供默认值
+  const agentLevel = user.agent_level || 0;
+  const firstLevelCount = user.first_level_count || 0;
+  const secondLevelCount = user.second_level_count || 0;
+  const thirdLevelCount = user.third_level_count || 0;
+  const firstLevelQuota = user.first_level_quota || 0;
+  const secondLevelQuota = user.second_level_quota || 0;
+  const thirdLevelQuota = user.third_level_quota || 0;
+
   // 计算团队总人数
-  const totalTeamMembers = user.first_level_count + user.second_level_count + user.third_level_count;
+  const totalTeamMembers = firstLevelCount + secondLevelCount + thirdLevelCount;
 
   // 计算团队总贡献
-  const totalTeamQuota = user.first_level_quota + user.second_level_quota + user.third_level_quota;
+  const totalTeamQuota = firstLevelQuota + secondLevelQuota + thirdLevelQuota;
 
   // 代理级别升级条件
   const levelConditions = {
@@ -50,7 +59,7 @@ const AgentInfo = ({ t, userState }) => {
     if (currentLevel >= 3) return 100;
     const nextLevel = currentLevel + 1;
     const required = levelConditions[nextLevel];
-    const current = user.first_level_count;
+    const current = firstLevelCount;
     return Math.min((current / required) * 100, 100);
   };
 
@@ -76,10 +85,10 @@ const AgentInfo = ({ t, userState }) => {
           <Typography.Text strong>{t('当前级别')}</Typography.Text>
           <div className="mt-2 flex items-center gap-2">
             <Typography.Text className="text-lg font-semibold">
-              {agentLevelNames[user.agent_level] || t('普通用户')}
+              {agentLevelNames[agentLevel] || t('普通用户')}
             </Typography.Text>
             <Typography.Text type="secondary">
-              Lv.{user.agent_level}
+              Lv.{agentLevel}
             </Typography.Text>
           </div>
         </div>
@@ -88,16 +97,16 @@ const AgentInfo = ({ t, userState }) => {
         <div>
           <Typography.Text strong>{t('升级进度')}</Typography.Text>
           <Progress
-            percent={getUpgradeProgress(user.agent_level)}
+            percent={getUpgradeProgress(agentLevel)}
             showInfo={false}
             className="mt-2"
           />
           <div className="mt-1 flex justify-between text-sm text-gray-500">
-            <span>{t('当前: {{count}}个一级团队成员', { count: user.first_level_count })}</span>
-            <span>{getNextLevelCondition(user.agent_level)}</span>
+            <span>{t('当前: {{count}}个一级团队成员', { count: firstLevelCount })}</span>
+            <span>{getNextLevelCondition(agentLevel)}</span>
           </div>
           <Typography.Text type="secondary" className="mt-1 block">
-            {t('下一等级: {{level}}', { level: getNextLevelName(user.agent_level) })}
+            {t('下一等级: {{level}}', { level: getNextLevelName(agentLevel) })}
           </Typography.Text>
         </div>
 
@@ -109,23 +118,23 @@ const AgentInfo = ({ t, userState }) => {
           <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-gray-50 p-3 rounded">
               <Typography.Text type="secondary" className="block">{t('一级团队')}</Typography.Text>
-              <Typography.Text className="text-xl font-semibold">{user.first_level_count}</Typography.Text>
+              <Typography.Text className="text-xl font-semibold">{firstLevelCount}</Typography.Text>
               <Typography.Text type="secondary" className="block text-sm">
-                {t('贡献: {{quota}}', { quota: user.first_level_quota })}
+                {t('贡献: {{quota}}', { quota: firstLevelQuota })}
               </Typography.Text>
             </div>
             <div className="bg-gray-50 p-3 rounded">
               <Typography.Text type="secondary" className="block">{t('二级团队')}</Typography.Text>
-              <Typography.Text className="text-xl font-semibold">{user.second_level_count}</Typography.Text>
+              <Typography.Text className="text-xl font-semibold">{secondLevelCount}</Typography.Text>
               <Typography.Text type="secondary" className="block text-sm">
-                {t('贡献: {{quota}}', { quota: user.second_level_quota })}
+                {t('贡献: {{quota}}', { quota: secondLevelQuota })}
               </Typography.Text>
             </div>
             <div className="bg-gray-50 p-3 rounded">
               <Typography.Text type="secondary" className="block">{t('三级团队')}</Typography.Text>
-              <Typography.Text className="text-xl font-semibold">{user.third_level_count}</Typography.Text>
+              <Typography.Text className="text-xl font-semibold">{thirdLevelCount}</Typography.Text>
               <Typography.Text type="secondary" className="block text-sm">
-                {t('贡献: {{quota}}', { quota: user.third_level_quota })}
+                {t('贡献: {{quota}}', { quota: thirdLevelQuota })}
               </Typography.Text>
             </div>
           </div>
