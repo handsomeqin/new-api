@@ -110,9 +110,55 @@ const AgentPage = () => {
 
   const handleCopyInviteLink = () => {
     const inviteLink = generateInviteLink();
-    navigator.clipboard.writeText(inviteLink);
-    setCopySuccess(true);
-    setTimeout(() => setCopySuccess(false), 2000);
+    
+    // 尝试使用现代的clipboard API
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(inviteLink)
+        .then(() => {
+          setCopySuccess(true);
+          setTimeout(() => setCopySuccess(false), 2000);
+        })
+        .catch(err => {
+          console.error('无法使用clipboard API:', err);
+          // 回退到传统方法
+          fallbackCopyTextToClipboard(inviteLink);
+        });
+    } else {
+      // 使用传统方法
+      fallbackCopyTextToClipboard(inviteLink);
+    }
+  };
+
+  // 传统的复制方法作为回退
+  const fallbackCopyTextToClipboard = (text) => {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    
+    // 确保文本区域不在屏幕上可见
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    
+    // 选择文本并复制
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000);
+      } else {
+        showError(t('复制失败，请手动复制'));
+      }
+    } catch (err) {
+      console.error('复制失败:', err);
+      showError(t('复制失败，请手动复制'));
+    } finally {
+      // 清理
+      document.body.removeChild(textArea);
+    }
   };
 
   const getUpgradeProgress = () => {

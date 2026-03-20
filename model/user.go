@@ -499,15 +499,32 @@ func (user *User) Insert(inviterId int) error {
 		user.SetSetting(defaultSetting)
 	}
 
-	result := DB.Create(user)
+	// 创建cleanUser并设置InviterId
+	cleanUser := User{
+		Username:    user.Username,
+		Password:    user.Password,
+		DisplayName: user.Username,
+		InviterId:   inviterId,
+		Role:        common.RoleCommonUser,
+		Quota:       user.Quota,
+		AffCode:     user.AffCode,
+		Setting:     user.Setting,
+	}
+
+	// 如果启用了邮箱验证，添加邮箱
+	if user.Email != "" {
+		cleanUser.Email = user.Email
+	}
+
+	result := DB.Create(&cleanUser)
 	if result.Error != nil {
 		return result.Error
 	}
 
 	// 用户创建成功后，根据角色初始化边栏配置
-	// 需要重新获取用户以确保有正确的ID和Role
+	// 使用cleanUser的ID
 	var createdUser User
-	if err := DB.Where("username = ?", user.Username).First(&createdUser).Error; err == nil {
+	if err := DB.Where("id = ?", cleanUser.Id).First(&createdUser).Error; err == nil {
 		// 生成基于角色的默认边栏配置
 		defaultSidebarConfig := generateDefaultSidebarConfigForRole(createdUser.Role)
 		if defaultSidebarConfig != "" {
@@ -520,12 +537,12 @@ func (user *User) Insert(inviterId int) error {
 	}
 
 	if common.QuotaForNewUser > 0 {
-		RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("新用户注册赠送 %s", logger.LogQuota(common.QuotaForNewUser)))
+		RecordLog(cleanUser.Id, LogTypeSystem, fmt.Sprintf("新用户注册赠送 %s", logger.LogQuota(common.QuotaForNewUser)))
 	}
 	if inviterId != 0 {
 		if common.QuotaForInvitee > 0 {
-			_ = IncreaseUserQuota(user.Id, common.QuotaForInvitee, true)
-			RecordLog(user.Id, LogTypeSystem, fmt.Sprintf("使用邀请码赠送 %s", logger.LogQuota(common.QuotaForInvitee)))
+			_ = IncreaseUserQuota(cleanUser.Id, common.QuotaForInvitee, true)
+			RecordLog(cleanUser.Id, LogTypeSystem, fmt.Sprintf("使用邀请码赠送 %s", logger.LogQuota(common.QuotaForInvitee)))
 		}
 		if common.QuotaForInviter > 0 {
 			//_ = IncreaseUserQuota(inviterId, common.QuotaForInviter)
@@ -555,6 +572,9 @@ func (user *User) InsertWithTx(tx *gorm.DB, inviterId int) error {
 		defaultSetting := dto.UserSetting{}
 		user.SetSetting(defaultSetting)
 	}
+
+	// 设置InviterId
+	user.InviterId = inviterId
 
 	result := tx.Create(user)
 	if result.Error != nil {
