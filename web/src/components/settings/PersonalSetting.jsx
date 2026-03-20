@@ -41,7 +41,6 @@ import AccountManagement from './personal/cards/AccountManagement';
 import NotificationSettings from './personal/cards/NotificationSettings';
 import PreferencesSettings from './personal/cards/PreferencesSettings';
 import CheckinCalendar from './personal/cards/CheckinCalendar';
-import AgentInfo from './personal/cards/AgentInfo';
 import EmailBindModal from './personal/modals/EmailBindModal';
 import WeChatBindModal from './personal/modals/WeChatBindModal';
 import AccountDeleteModal from './personal/modals/AccountDeleteModal';
@@ -467,10 +466,7 @@ const PersonalSetting = () => {
             </div>
           )}
 
-          {/* 代理信息 */}
-          <div className='mt-4 md:mt-6'>
-            <AgentInfo t={t} userState={userState} />
-          </div>
+
 
           {/* 账户管理和其他设置 */}
           <div className='grid grid-cols-1 xl:grid-cols-2 items-start gap-4 md:gap-6 mt-4 md:mt-6'>
