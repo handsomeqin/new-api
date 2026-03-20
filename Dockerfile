@@ -23,9 +23,13 @@ ADD go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-COPY ./VERSION .
+# 确保VERSION文件被正确复制
+COPY VERSION .
 COPY --from=builder /build/dist ./web/dist
-RUN go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(cat VERSION)'" -o new-api
+# 添加调试信息
+RUN ls -la && cat VERSION
+# 构建应用
+RUN go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=1.0.0'" -o new-api
 
 FROM debian:bookworm-slim
 
