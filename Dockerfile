@@ -31,7 +31,7 @@ RUN ls -la && cat VERSION
 # 显示Go版本和环境信息
 RUN go version && go env
 # 构建应用
-RUN go build -v -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=1.0.0'" -o new-api
+RUN go build -v -ldflags "-s -w -X \"github.com/QuantumNous/new-api/common.Version=1.0.0\"" -o new-api
 
 FROM debian:bookworm-slim
 
