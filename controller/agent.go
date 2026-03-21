@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"github.com/QuantumNous/new-api/common"
 	"github.com/QuantumNous/new-api/constant"
 	"github.com/QuantumNous/new-api/model"
+	"github.com/QuantumNous/new-api/setting/operation_setting"
 	"github.com/gin-gonic/gin"
 )
 
@@ -50,7 +52,8 @@ func GetAgentInfo(c *gin.Context) {
 
 	// 计算累计收益（转换为金额）
 	totalEarnings := user.FirstLevelQuota + user.SecondLevelQuota + user.ThirdLevelQuota
-	totalEarningsAmount := float64(totalEarnings) / common.QuotaPerUnit
+	totalEarningsUSD := float64(totalEarnings) / common.QuotaPerUnit
+	totalEarningsCNY := totalEarningsUSD * operation_setting.USDExchangeRate
 
 	c.JSON(200, gin.H{
 		"AgentLevel":      user.AgentLevel,
@@ -60,7 +63,7 @@ func GetAgentInfo(c *gin.Context) {
 		"FirstLevelQuota": user.FirstLevelQuota,
 		"SecondLevelQuota": user.SecondLevelQuota,
 		"ThirdLevelQuota": user.ThirdLevelQuota,
-		"TotalEarnings":   totalEarningsAmount,
+		"TotalEarnings":   totalEarningsCNY,
 		"AffHistoryQuota": user.AffHistoryQuota,
 		"UpgradeProgress": upgradeProgress,
 		"AffCode":         user.AffCode,
