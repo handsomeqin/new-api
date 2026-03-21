@@ -377,6 +377,7 @@ func SetApiRouter(router *gin.Engine) {
 			agentRoute.GET("/info", controller.GetAgentInfo)
 			agentRoute.GET("/team", controller.GetTeamMembers)
 			agentRoute.GET("/rewards", controller.GetAgentRewards)
+			agentRoute.GET("/topup-records", controller.GetUserTopupRecords)
 			agentRoute.GET("/invite-link", controller.GetAgentInviteLink)
 			agentRoute.POST("/upgrade", controller.UpgradeAgentLevel)
 		}
