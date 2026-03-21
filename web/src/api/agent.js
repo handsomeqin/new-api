@@ -29,9 +29,3 @@ export const upgradeAgentLevel = async () => {
   const response = await API.post('/api/agent/upgrade');
   return response.data;
 };
-
-// 获取用户充值记录
-export const getUserTopupRecords = async (userId) => {
-  const response = await API.get(`/api/agent/topup-records?user_id=${userId}`);
-  return response.data;
-};

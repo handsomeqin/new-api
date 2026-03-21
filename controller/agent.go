@@ -74,8 +74,8 @@ func GetTeamMembers(c *gin.Context) {
 		return
 	}
 
-	// 验证用户存在
-	_, err := model.GetUserById(userID.(int), false)
+	// 获取当前用户
+	currentUser, err := model.GetUserById(userID.(int), false)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "获取用户信息失败"})
 		return
@@ -87,37 +87,55 @@ func GetTeamMembers(c *gin.Context) {
 	// 获取一级团队成员
 	firstLevelUsers, err := model.GetUsersByInviterId(userID.(int))
 	if err == nil {
+		// 计算每个一级团队成员的贡献
+		firstLevelContribution := 0
+		if len(firstLevelUsers) > 0 {
+			firstLevelContribution = currentUser.FirstLevelQuota / len(firstLevelUsers)
+		}
+
 		for _, user := range firstLevelUsers {
 			teamMembers = append(teamMembers, gin.H{
 				"id":           user.Id,
 				"username":     user.Username,
 				"level":        user.AgentLevel,
 				"relation":     1, // 1表示一级
-				"contribution": 0, // 暂时设为0，后续可以根据实际充值记录计算
+				"contribution": firstLevelContribution, // 贡献额度
 			})
 
 			// 获取二级团队成员
 			secondLevelUsers, err := model.GetUsersByInviterId(user.Id)
 			if err == nil {
+				// 计算每个二级团队成员的贡献
+				secondLevelContribution := 0
+				if len(secondLevelUsers) > 0 {
+					secondLevelContribution = currentUser.SecondLevelQuota / len(secondLevelUsers)
+				}
+
 				for _, secondUser := range secondLevelUsers {
 					teamMembers = append(teamMembers, gin.H{
 						"id":           secondUser.Id,
 						"username":     secondUser.Username,
 						"level":        secondUser.AgentLevel,
 						"relation":     2, // 2表示二级
-						"contribution": 0, // 暂时设为0，后续可以根据实际充值记录计算
+						"contribution": secondLevelContribution, // 贡献额度
 					})
 
 					// 获取三级团队成员
 					thirdLevelUsers, err := model.GetUsersByInviterId(secondUser.Id)
 					if err == nil {
+						// 计算每个三级团队成员的贡献
+						thirdLevelContribution := 0
+						if len(thirdLevelUsers) > 0 {
+							thirdLevelContribution = currentUser.ThirdLevelQuota / len(thirdLevelUsers)
+						}
+
 						for _, thirdUser := range thirdLevelUsers {
 							teamMembers = append(teamMembers, gin.H{
 								"id":           thirdUser.Id,
 								"username":     thirdUser.Username,
 								"level":        thirdUser.AgentLevel,
 								"relation":     3, // 3表示三级
-								"contribution": 0, // 暂时设为0，后续可以根据实际充值记录计算
+								"contribution": thirdLevelContribution, // 贡献额度
 							})
 						}
 					}
@@ -138,26 +156,6 @@ func GetAgentRewards(c *gin.Context) {
 	}
 
 	// 这里需要实现获取代理收益记录的逻辑
-	// 暂时返回空数组，后续需要根据实际情况实现
-	c.JSON(200, []gin.H{})
-}
-
-// GetUserTopupRecords 获取用户充值记录
-func GetUserTopupRecords(c *gin.Context) {
-	userID, exists := c.Get(string(constant.ContextKeyUserId))
-	if !exists {
-		c.JSON(401, gin.H{"error": "未授权"})
-		return
-	}
-
-	// 获取目标用户ID
-	targetUserID := c.Query("user_id")
-	if targetUserID == "" {
-		c.JSON(400, gin.H{"error": "用户ID不能为空"})
-		return
-	}
-
-	// 这里需要实现获取用户充值记录的逻辑
 	// 暂时返回空数组，后续需要根据实际情况实现
 	c.JSON(200, []gin.H{})
 }
