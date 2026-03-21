@@ -21,6 +21,7 @@ const AgentPage = () => {
         setTeamMembers(members);
       } catch (error) {
         showError(t('获取代理信息失败'));
+        setTeamMembers([]);
       } finally {
         setLoading(false);
       }
