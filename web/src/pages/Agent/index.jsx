@@ -18,7 +18,8 @@ const AgentPage = () => {
         setAgentInfo(info);
         
         const members = await getTeamMembers();
-        setTeamMembers(members);
+        // 确保 teamMembers 始终是一个数组
+        setTeamMembers(Array.isArray(members) ? members : []);
       } catch (error) {
         showError(t('获取代理信息失败'));
         setTeamMembers([]);
