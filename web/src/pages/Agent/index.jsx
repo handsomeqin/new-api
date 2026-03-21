@@ -247,7 +247,7 @@ const AgentPage = () => {
                     <div className='stat-item'>
                       <Typography.Text type='secondary'>{t('累计收益')}</Typography.Text>
                       <Typography.Title heading={4} className='income-text'>
-                        ¥{(agentInfo?.TotalIncome || 0).toFixed(2)}
+                        ¥{(agentInfo?.TotalEarnings || 0).toFixed(2)}
                       </Typography.Title>
                     </div>
                   </div>
@@ -369,15 +369,6 @@ const AgentPage = () => {
                     return <Tag color='grey'>{t('未知')}</Tag>;
                 }
               },
-            },
-            {
-              title: t('贡献'),
-              dataIndex: 'contribution',
-              render: (contribution) => (
-                <Typography.Text strong className='contribution-text'>
-                  ¥{contribution || 0}
-                </Typography.Text>
-              ),
             },
           ]}
           dataSource={teamMembers}

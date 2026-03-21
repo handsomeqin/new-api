@@ -74,68 +74,40 @@ func GetTeamMembers(c *gin.Context) {
 		return
 	}
 
-	// 获取当前用户
-	currentUser, err := model.GetUserById(userID.(int), false)
-	if err != nil {
-		c.JSON(500, gin.H{"error": "获取用户信息失败"})
-		return
-	}
-
 	// 获取当前用户的所有团队成员
 	var teamMembers []gin.H
 
 	// 获取一级团队成员
 	firstLevelUsers, err := model.GetUsersByInviterId(userID.(int))
 	if err == nil {
-		// 计算每个一级团队成员的贡献
-		firstLevelContribution := 0
-		if len(firstLevelUsers) > 0 {
-			firstLevelContribution = currentUser.FirstLevelQuota / len(firstLevelUsers)
-		}
-
 		for _, user := range firstLevelUsers {
 			teamMembers = append(teamMembers, gin.H{
-				"id":           user.Id,
-				"username":     user.Username,
-				"level":        user.AgentLevel,
-				"relation":     1, // 1表示一级
-				"contribution": firstLevelContribution, // 贡献额度
+				"id":       user.Id,
+				"username": user.Username,
+				"level":    user.AgentLevel,
+				"relation": 1, // 1表示一级
 			})
 
 			// 获取二级团队成员
 			secondLevelUsers, err := model.GetUsersByInviterId(user.Id)
 			if err == nil {
-				// 计算每个二级团队成员的贡献
-				secondLevelContribution := 0
-				if len(secondLevelUsers) > 0 {
-					secondLevelContribution = currentUser.SecondLevelQuota / len(secondLevelUsers)
-				}
-
 				for _, secondUser := range secondLevelUsers {
 					teamMembers = append(teamMembers, gin.H{
-						"id":           secondUser.Id,
-						"username":     secondUser.Username,
-						"level":        secondUser.AgentLevel,
-						"relation":     2, // 2表示二级
-						"contribution": secondLevelContribution, // 贡献额度
+						"id":       secondUser.Id,
+						"username": secondUser.Username,
+						"level":    secondUser.AgentLevel,
+						"relation": 2, // 2表示二级
 					})
 
 					// 获取三级团队成员
 					thirdLevelUsers, err := model.GetUsersByInviterId(secondUser.Id)
 					if err == nil {
-						// 计算每个三级团队成员的贡献
-						thirdLevelContribution := 0
-						if len(thirdLevelUsers) > 0 {
-							thirdLevelContribution = currentUser.ThirdLevelQuota / len(thirdLevelUsers)
-						}
-
 						for _, thirdUser := range thirdLevelUsers {
 							teamMembers = append(teamMembers, gin.H{
-								"id":           thirdUser.Id,
-								"username":     thirdUser.Username,
-								"level":        thirdUser.AgentLevel,
-								"relation":     3, // 3表示三级
-								"contribution": thirdLevelContribution, // 贡献额度
+								"id":       thirdUser.Id,
+								"username": thirdUser.Username,
+								"level":    thirdUser.AgentLevel,
+								"relation": 3, // 3表示三级
 							})
 						}
 					}
