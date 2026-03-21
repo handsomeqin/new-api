@@ -48,8 +48,9 @@ func GetAgentInfo(c *gin.Context) {
 		}
 	}
 
-	// 计算累计收益
+	// 计算累计收益（转换为金额）
 	totalEarnings := user.FirstLevelQuota + user.SecondLevelQuota + user.ThirdLevelQuota
+	totalEarningsAmount := float64(totalEarnings) / common.QuotaPerUnit
 
 	c.JSON(200, gin.H{
 		"AgentLevel":      user.AgentLevel,
@@ -59,7 +60,7 @@ func GetAgentInfo(c *gin.Context) {
 		"FirstLevelQuota": user.FirstLevelQuota,
 		"SecondLevelQuota": user.SecondLevelQuota,
 		"ThirdLevelQuota": user.ThirdLevelQuota,
-		"TotalEarnings":   totalEarnings,
+		"TotalEarnings":   totalEarningsAmount,
 		"AffHistoryQuota": user.AffHistoryQuota,
 		"UpgradeProgress": upgradeProgress,
 		"AffCode":         user.AffCode,
