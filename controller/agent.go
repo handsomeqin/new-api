@@ -74,8 +74,8 @@ func GetTeamMembers(c *gin.Context) {
 		return
 	}
 
-	// 获取当前用户
-	currentUser, err := model.GetUserById(userID.(int), false)
+	// 验证用户存在
+	_, err := model.GetUserById(userID.(int), false)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "获取用户信息失败"})
 		return
