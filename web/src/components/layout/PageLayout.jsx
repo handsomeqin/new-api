@@ -61,8 +61,6 @@ const PageLayout = () => {
     '/pricing',
   ];
 
-  const shouldHideFooter = cardProPages.includes(location.pathname);
-
   const shouldInnerPadding =
     location.pathname.includes('/console') &&
     !location.pathname.startsWith('/console/chat') &&
@@ -165,6 +163,9 @@ const PageLayout = () => {
     }
   }, []);
 
+  const isHomePage = location.pathname === '/';
+  const shouldHideFooter = cardProPages.includes(location.pathname) || isHomePage;
+
   return (
     <div className='w-full'>
       {/* 背景效果 */}
@@ -184,22 +185,24 @@ const PageLayout = () => {
           zIndex: 1,
         }}
       >
-        <Header
-          style={{
-            padding: 0,
-            height: 'auto',
-            lineHeight: 'normal',
-            position: 'fixed',
-            width: '100%',
-            top: 0,
-            zIndex: 100,
-          }}
-        >
-          <HeaderBar
-            onMobileMenuToggle={() => setDrawerOpen((prev) => !prev)}
-            drawerOpen={drawerOpen}
-          />
-        </Header>
+        {!isHomePage && (
+          <Header
+            style={{
+              padding: 0,
+              height: 'auto',
+              lineHeight: 'normal',
+              position: 'fixed',
+              width: '100%',
+              top: 0,
+              zIndex: 100,
+            }}
+          >
+            <HeaderBar
+              onMobileMenuToggle={() => setDrawerOpen((prev) => !prev)}
+              drawerOpen={drawerOpen}
+            />
+          </Header>
+        )}
         <Layout
           style={{
             overflow: isMobile ? 'visible' : 'auto',
@@ -246,6 +249,7 @@ const PageLayout = () => {
                 WebkitOverflowScrolling: 'touch',
                 padding: shouldInnerPadding ? (isMobile ? '5px' : '24px') : '0',
                 position: 'relative',
+                marginTop: isHomePage ? '0' : '64px',
               }}
             >
               <App />

@@ -211,11 +211,225 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    // 先显示页面，再加载内容
+    // 直接设置为新的首页内容
     setHomePageContentLoaded(true);
     
-    // 异步加载首页内容
-    displayHomePageContent().then();
+    // 新的首页内容
+    const newHomeContent = `
+      <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&display=swap" rel="stylesheet">
+      <style>
+        body { font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; }
+        .text-future { letter-spacing: -0.045em; font-weight: 600; }
+        .hero-bg { background: linear-gradient(135deg, #f8f4ff 0%, #e0f2fe 45%, #f3e8ff 100%); }
+        .dark-bg { background-color: #010120; }
+        .sharp { border-radius: 4px; }
+        .comfort { border-radius: 12px; }
+        .shadow-brand { box-shadow: 0 8px 20px rgba(1, 1, 32, 0.08); }
+        .mono-label { font-family: ui-monospace, monospace; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.7rem; }
+        .model-icon { height: 60px; width: 60px; background: linear-gradient(135deg, #ef2cc1, #fc4c02); border-radius: 16px; }
+        .btn-loading { opacity: 0.6; pointer-events: none; }
+        /* 黑色背景上的卡片底纹效果 */
+        .dark-bg .comfort {
+          background-image: radial-gradient(circle at 100% 100%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                            radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+          background-size: 100% 100%, 100% 100%;
+          background-position: right bottom, left top;
+          background-repeat: no-repeat;
+        }
+      </style>
+      
+
+
+      <!-- Hero 主视觉 -->
+      <section class="hero-bg pt-24 pb-20 text-center relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-6 relative">
+          <div class="inline-flex items-center gap-2 bg-white/70 px-6 py-2 sharp border border-black/10 mb-8">
+            <span class="mono-label text-[#ef2cc1]">大模型服务平台</span>
+          </div>
+          <h1 class="text-5xl md:text-7xl leading-none font-semibold text-future tracking-tighter mb-6">
+            让 AI 客服与内容生产<br>稳定落地
+          </h1>
+          <p class="max-w-2xl mx-auto text-xl text-gray-700 mb-10">
+            预部署模型 · 零运维 · 高性价比 · 国产合规<br>
+            直接通过 API / 控制台调用，无需自建服务器
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button onclick="showTrialModal()" class="px-12 py-5 bg-gray-200 text-black text-lg font-medium sharp hover:bg-gray-300 transition shadow-brand">立即免费试用</button>
+            <a href="#guarantee" class="px-12 py-5 border-2 border-black/30 text-lg font-medium sharp hover:bg-white/60">了解服务保障 →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 核心价值短句 -->
+      <section class="py-12 bg-white border-b">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div><div class="w-12 h-12 bg-gradient-to-br from-[#ef2cc1] to-[#fc4c02] rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-3">🚀</div><div class="font-medium">开箱即用</div><div class="text-xs text-gray-500">API / 控制台直接调用</div></div>
+          <div><div class="w-12 h-12 bg-gradient-to-br from-[#bdbbff] to-blue-500 rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-3">🛡️</div><div class="font-medium">稳定商用</div><div class="text-xs text-gray-500">7×24 集群冗余</div></div>
+          <div><div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-3">🇨🇳</div><div class="font-medium">国产合规</div><div class="text-xs text-gray-500">数据安全可控</div></div>
+          <div><div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-amber-500 rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-3">💰</div><div class="font-medium">高性价比</div><div class="text-xs text-gray-500">省去硬件与运维成本</div></div>
+        </div>
+      </section>
+
+      <!-- 模型能力 -->
+      <section id="models" class="py-20 dark-bg text-white">
+        <div class="max-w-6xl mx-auto px-6">
+          <div class="text-center mb-12"><span class="mono-label text-[#bdbbff]">支持模型</span><h2 class="text-4xl text-future tracking-tighter mt-3">主流国产大模型 · 按 Token 计费</h2></div>
+          <div class="grid md:grid-cols-3 gap-8">
+            <div class="comfort bg-white/10 border border-white/20 p-8 text-center"><div class="w-16 h-16 bg-gradient-to-br from-[#ef2cc1] to-[#fc4c02] rounded-lg flex items-center justify-center text-white text-2xl mx-auto mb-6"><img src="/src/deepseek.svg" alt="DeepSeek" class="w-12 h-12 object-contain" /></div><div class="font-medium text-xl mb-3">DeepSeek 系列</div><p class="text-gray-300 text-sm mb-4">强推理、代码生成、数理逻辑</p><p class="text-gray-400 text-xs">国产之光 数学与代码能力达国际一流水平</p></div>
+            <div class="comfort bg-white/10 border border-white/20 p-8 text-center"><div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-2xl mx-auto mb-6"><img src="/src/qwen.svg" alt="Qwen" class="w-12 h-12 object-contain" /></div><div class="font-medium text-xl mb-3">Qwen 系列</div><p class="text-gray-300 text-sm mb-4">指令跟随、内容创作、多轮对话</p><p class="text-gray-400 text-xs">阿里云通义千问 中文创作理解与逻辑推理能力卓越</p></div>
+            <div class="comfort bg-white/10 border border-white/20 p-8 text-center"><div class="w-16 h-16 bg-gradient-to-br from-green-400 to-cyan-500 rounded-lg flex items-center justify-center text-white text-2xl mx-auto mb-6"><img src="/src/minimax.svg" alt="MiniMax" class="w-12 h-12 object-contain" /></div><div class="font-medium text-xl mb-3">MiniMax 系列</div><p class="text-gray-300 text-sm mb-4">超长上下文、Agent 编排</p><p class="text-gray-400 text-xs">支持 400 万 token 超长上下文，深度 Agent 编排满足复杂业务场景</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 价格套餐 -->
+      <section id="pricing" class="py-20 bg-white pricing-section">
+        <div class="max-w-6xl mx-auto px-6">
+          <div class="text-center mb-12"><span class="mono-label text-[#ef2cc1]">透明计费</span><h2 class="text-4xl text-future tracking-tighter mt-3">按 Token + 包月套餐</h2></div>
+          <div class="grid md:grid-cols-3 gap-8">
+            <div class="comfort border border-black/20 p-10"><h3 class="text-2xl font-medium mb-6">按 Token 计费</h3><div class="text-4xl font-semibold text-future mb-2">0.1~5元 / 百万</div><div class="text-sm text-gray-500 mb-8">比官网优惠30%</div><a href="/console" class="w-full py-4 bg-white text-black border border-black/20 sharp hover:bg-black/5 flex items-center justify-center">立即开通</a></div>
+            <div class="comfort border border-black/20 p-10"><h3 class="text-2xl font-medium mb-6">Lite 基础套餐</h3><div class="text-5xl font-semibold text-future mb-2">20元 / 月</div><div class="text-sm text-gray-500 mb-8">1200 次请求/ 5 小时；9000 次请求/周；18000 次请求/月 超级划算</div><a href="/console" class="w-full py-4 bg-white text-black border border-black/20 sharp hover:bg-black/5 flex items-center justify-center">开通 Lite</a></div>
+            <div class="comfort border-2 border-[#ef2cc1] p-10 relative"><div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#ef2cc1] text-white text-xs px-6 py-1 sharp">推荐</div><h3 class="text-2xl font-medium mb-6">Pro 高级套餐</h3><div class="text-5xl font-semibold text-future mb-2">100元 / 月</div><div class="text-sm text-gray-500 mb-8">6000 次请求/5 小时 ；45000 次请求/周 ； 90000 次请求/月 安心无忧</div><a href="/console" class="w-full py-4 bg-white text-black border border-black/20 sharp hover:bg-black/5 flex items-center justify-center">开通 Pro</a></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 稳定保障模块 -->
+      <section id="guarantee" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16">
+          <div>
+            <span class="mono-label text-[#bdbbff]">服务保障</span>
+            <h2 class="text-4xl text-future tracking-tighter mt-3 mb-8">稳定保障 · 裸金属服务集群</h2>
+            <div class="space-y-8">
+              <div class="flex gap-6">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl">🛡️</div>
+                <div>
+                  <div class="font-medium text-lg">7×24 小时稳定运行</div>
+                  <div class="text-gray-600">集群冗余架构，峰值期自动扩容，可用率 99.9%+</div>
+                </div>
+              </div>
+              <div class="flex gap-6">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl">🔒</div>
+                <div>
+                  <div class="font-medium text-lg">国产合规 · 数据安全</div>
+                  <div class="text-gray-600">国内节点部署，资源隔离，符合企业商业化合规要求</div>
+                </div>
+              </div>
+              <div class="flex gap-6">
+                <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-3xl">📞</div>
+                <div>
+                  <div class="font-medium text-lg">专业技术支持</div>
+                  <div class="text-gray-600">工单 + 专属对接，接入指导 &lt;10 分钟，7×24 响应</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="h-full flex items-center justify-center">
+            <div class="w-full h-64 rounded-2xl shadow-brand flex items-center justify-center">
+              <img src="/src/保障.jpeg" alt="服务保障" class="w-full h-full object-cover rounded-2xl" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 性价比对比 -->
+      <section class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-6">
+          <div class="text-center mb-12"><span class="mono-label text-[#ef2cc1]">高性价比</span><h2 class="text-4xl text-future tracking-tighter mt-3">比自建更省心省钱</h2></div>
+          <div class="grid md:grid-cols-2 gap-12">
+            <div class="comfort bg-white p-10 shadow-brand">
+              <h3 class="font-medium text-xl mb-6 text-red-600">自建模型成本</h3>
+              <ul class="space-y-4 text-sm">
+                <li class="flex justify-between"><span>GPU 服务器采购</span><span class="font-medium">高</span></li>
+                <li class="flex justify-between"><span>部署与环境优化</span><span class="font-medium">复杂</span></li>
+                <li class="flex justify-between"><span>运维 + 电费 + 带宽</span><span class="font-medium">持续高</span></li>
+                <li class="flex justify-between"><span>月产10万篇文案示例</span><span class="font-medium text-red-600">≈5万元/月</span></li>
+              </ul>
+            </div>
+            <div class="comfort bg-white p-10 shadow-brand">
+              <h3 class="font-medium text-xl mb-6 text-emerald-600">云基算力</h3>
+              <ul class="space-y-4 text-sm">
+                <li class="flex justify-between"><span>零硬件采购</span><span class="font-medium text-emerald-600">0元</span></li>
+                <li class="flex justify-between"><span>平台预部署完成</span><span class="font-medium text-emerald-600">开箱即用</span></li>
+                <li class="flex justify-between"><span>按量 / 包月计费</span><span class="font-medium text-emerald-600">灵活</span></li>
+                <li class="flex justify-between"><span>月产10万篇文案示例</span><span class="font-medium text-emerald-600">≈8000元/月</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="mt-10 text-center text-emerald-600 font-medium">
+            一句话中翻中：自建比买官网便宜，而买云基成本仅为自建的 1/6，省去 70% 搭建与运维费用
+          </div>
+        </div>
+      </section>
+
+      <!-- 行业案例 -->
+      <section id="cases" class="py-20 dark-bg text-white">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 class="text-4xl text-future tracking-tighter text-center mb-12">服务于头部客户</h2>
+          <div class="grid md:grid-cols-3 gap-8">
+            <div class="comfort bg-white/10 border border-white/20 p-8">
+              <div class="w-full h-32 rounded mb-6 flex items-center justify-center">
+                <img src="/src/中国移动.jpeg" alt="中国移动 AI 客服" class="w-full h-full object-cover rounded" />
+              </div>
+              <h3 class="font-medium">中国移动 AI 客服</h3>
+              <p class="text-sm text-gray-300 mt-3">智能客服系统日均处理 10 万+ 会话请求，高峰期并发提升 5 倍，准确率与响应速度均大幅领先，极大减轻人工坐席压力</p>
+            </div>
+            <div class="comfort bg-white/10 border border-white/20 p-8">
+              <div class="w-full h-32 rounded mb-6 flex items-center justify-center">
+                <img src="/src/人保财险.jpeg" alt="人保财险 知识助手" class="w-full h-full object-cover rounded" />
+              </div>
+              <h3 class="font-medium">人保财险 知识助手</h3>
+              <p class="text-sm text-gray-300 mt-3">内嵌大模型知识中台，业务人员查询效率提升 4 倍，理赔知识检索耗时缩短 70%，全面符合国产化合规要求</p>
+            </div>
+            <div class="comfort bg-white/10 border border-white/20 p-8">
+              <div class="w-full h-32 rounded mb-6 flex items-center justify-center">
+                <img src="/src/自媒体.jpeg" alt="自媒体工作室" class="w-full h-full object-cover rounded" />
+              </div>
+              <h3 class="font-medium">自媒体工作室</h3>
+              <p class="text-sm text-gray-300 mt-3">利用 AI 批量生成内容，单周产出量从 20 条跃升至 60 条，创意生产效率提升 3 倍，爆款内容孵化更轻松</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 关于我们 -->
+      <section id="about" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+          <h2 class="text-4xl text-future tracking-tighter mb-6">关于云基算力</h2>
+          <p class="text-lg text-gray-700 max-w-3xl mx-auto">杭州民兰信息科技有限公司成立于2016年，浙大创新研究院背景，核心团队以浙大博硕士为主，已服务中国移动、中国电信、中国人保、中华保险等机构。我们致力于提供稳定、高性价比的国产大模型服务，让企业无需关注底层算力，直接聚焦业务创新。</p>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="dark-bg text-white py-16">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+          <div class="flex justify-center items-center gap-3 mb-8">
+            <div class="h-8 w-8 bg-gradient-to-br from-[#ef2cc1] to-[#fc4c02] rounded-lg flex items-center justify-center text-white font-bold">云</div>
+            <span class="text-2xl font-medium text-future tracking-tighter">云基算力</span>
+          </div>
+          <div class="text-sm text-gray-400">© 2026 杭州民兰信息科技有限公司 浙ICP备20011256号</div>
+        </div>
+      </footer>
+
+      <!-- 试用弹窗 -->
+      <div id="trialModal" class="hidden fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="bg-white max-w-md w-full mx-auto rounded-xl p-8 relative shadow-lg" style="background-color: #ffffff !important; opacity: 1 !important;">
+          <button onclick="hideTrialModal()" class="absolute right-5 top-5 text-gray-400 hover:text-gray-800 text-2xl">&times;</button>
+          <h3 class="text-2xl font-bold mb-2 text-future">免费试用申请</h3>
+          <p class="text-gray-500 text-sm mb-6">我们会尽快联系您，加客服qq27434328领免费额度</p>
+          <div class="space-y-5">
+            <input type="text" id="trialName" placeholder="姓名 *" class="w-full px-5 py-3 border border-gray-300 rounded-lg" style="background-color: #ffffff !important; opacity: 1 !important;">
+            <input type="tel" id="trialPhone" placeholder="手机号 *" class="w-full px-5 py-3 border border-gray-300 rounded-lg" style="background-color: #ffffff !important; opacity: 1 !important;">
+            <input type="email" id="trialEmail" placeholder="电子邮箱 *" class="w-full px-5 py-3 border border-gray-300 rounded-lg" style="background-color: #ffffff !important; opacity: 1 !important;">
+            <textarea id="trialScenario" placeholder="使用场景（AI客服 / 自媒体 / 知识库等）" rows="3" class="w-full px-5 py-3 border border-gray-300 rounded-lg" style="background-color: #ffffff !important; opacity: 1 !important;"></textarea>
+            <button id="submitTrialBtn" class="w-full py-4 bg-gradient-to-r from-[#ef2cc1] to-[#fc4c02] text-white font-semibold rounded-lg hover:shadow-lg">提交申请</button>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    setHomePageContent(newHomeContent);
+    localStorage.setItem('home_page_content', newHomeContent);
     
     // 检查用户是否登录，优先获取真实数据
     const userStr = localStorage.getItem('user');
@@ -270,6 +484,87 @@ const Home = () => {
     }
   }, []);
 
+  // 添加一个useEffect钩子来定义弹窗相关函数
+  useEffect(() => {
+    // 定义showTrialModal函数
+    window.showTrialModal = () => {
+      const modal = document.getElementById('trialModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+      }
+    };
+
+    // 定义hideTrialModal函数
+    window.hideTrialModal = () => {
+      const modal = document.getElementById('trialModal');
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+    };
+
+    // 定义submitTrial函数
+    window.submitTrial = async () => {
+      const submitBtn = document.getElementById('submitTrialBtn');
+      if (!submitBtn) return;
+
+      const name = document.getElementById('trialName').value.trim();
+      const phone = document.getElementById('trialPhone').value.trim();
+      const email = document.getElementById('trialEmail').value.trim();
+      const scenario = document.getElementById('trialScenario').value.trim() || '未填写';
+
+      if (!name || !phone || !email) {
+        console.log('请填写完整信息');
+        return;
+      }
+
+      if (!/^\S+@\S+\.\S+$/.test(email)) {
+        console.log('邮箱格式错误');
+        return;
+      }
+
+      submitBtn.classList.add('btn-loading');
+      submitBtn.innerText = '提交中...';
+
+      try {
+        const res = await fetch('http://yfs.bbs5050.com/note.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, email, scenario, time: new Date().toLocaleString() })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          console.log('申请已提交，我们会尽快联系您！');
+          window.hideTrialModal();
+          ['trialName', 'trialPhone', 'trialEmail', 'trialScenario'].forEach(id => {
+            const element = document.getElementById(id);
+            if (element) element.value = '';
+          });
+        } else {
+          console.log('提交失败：' + (data.error || '未知错误'));
+        }
+      } catch (err) {
+        console.log('网络错误，请稍后重试');
+      } finally {
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.innerText = '提交申请';
+      }
+    };
+
+    // 为提交按钮添加点击事件监听器
+    const submitBtn = document.getElementById('submitTrialBtn');
+    if (submitBtn) {
+      submitBtn.addEventListener('click', window.submitTrial);
+    }
+
+    // 清理函数
+    return () => {
+      if (submitBtn) {
+        submitBtn.removeEventListener('click', window.submitTrial);
+      }
+    };
+  }, [homePageContent]);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setEndpointIndex((prev) => (prev + 1) % endpointItems.length);
@@ -284,6 +579,27 @@ const Home = () => {
         onClose={() => setNoticeVisible(false)}
         isMobile={isMobile}
       />
+      {/* 固定导航栏 */}
+      <header className="border-b border-black/10 bg-white/90 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="h-9 w-9 bg-gradient-to-br from-[#ef2cc1] to-[#fc4c02] rounded-lg flex items-center justify-center text-white font-bold text-xl">云</div>
+            <span className="text-2xl font-semibold text-future tracking-tighter">云基算力</span>
+          </div>
+          <nav className="hidden md:flex gap-8 text-sm font-medium">
+            <a href="#models" className="hover:text-[#ef2cc1]">模型能力</a>
+            <a href="#pricing" className="hover:text-[#ef2cc1]">价格套餐</a>
+            <a href="#guarantee" className="hover:text-[#ef2cc1]">服务保障</a>
+            <a href="#cases" className="hover:text-[#ef2cc1]">行业案例</a>
+            <a href="#about" className="hover:text-[#ef2cc1]">关于我们</a>
+            <a href="https://ai.bbs5050.com/doc/overview.html" className="hover:text-[#ef2cc1]" target="_blank">文档与工具</a>
+          </nav>
+          <div className="flex gap-4">
+            <button onClick={() => window.showTrialModal()} className="px-6 py-2.5 text-sm font-medium border border-black/20 bg-gray-200 text-black hover:bg-gray-300 sharp">免费试用</button>
+            <a href="/console" className="px-6 py-2.5 text-sm font-medium bg-[#010120] text-white sharp">登录控制台</a>
+          </div>
+        </div>
+      </header>
       {homePageContentLoaded && homePageContent === '' ? (
         <div className="w-full overflow-x-hidden">
           {/* 背景效果 */}
@@ -624,8 +940,8 @@ const Home = () => {
             />
           ) : (
             <div
-              className="mt-[60px]"
-              dangerouslySetInnerHTML={{ __html: homePageContent }}
+              className="mt-[10px]"
+              dangerouslySetInnerHTML={{ __html: homePageContent.replace(/<header[\s\S]*?<\/header>/, '') }}
             />
           )}
         </div>

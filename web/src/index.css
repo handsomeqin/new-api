@@ -18,45 +18,45 @@
   --sidebar-width: 180px;
   --sidebar-width-collapsed: 60px;
   --sidebar-current-width: var(--sidebar-width);
-  --primary: #00f0ff;
-  --secondary: #7b2cbf;
-  --accent: #ff00aa;
-  --dark: #0a0a0f;
-  --darker: #050508;
-  --light: #e0e0e0;
-  --text-color: #e0e0e0;
-  --bg-color: #050508;
-  --card-bg: rgba(20, 20, 30, 0.8);
-  --card-border: rgba(0, 240, 255, 0.2);
-  --input-bg: rgba(20, 20, 30, 0.8);
-  --input-border: rgba(0, 240, 255, 0.2);
-  --header-bg: rgba(10, 10, 15, 0.9);
-  --header-border: rgba(0, 240, 255, 0.2);
-  --sidebar-bg: rgba(10, 10, 15, 0.8);
-  --sidebar-border: rgba(0, 240, 255, 0.2);
-  --table-header-bg: rgba(20, 20, 30, 0.9);
-  --table-row-bg: rgba(10, 10, 15, 0.6);
-  --table-row-hover: rgba(20, 20, 30, 0.8);
-  --table-border: rgba(0, 240, 255, 0.1);
-  --footer-text: rgba(255, 255, 255, 0.3);
+  --primary: #000000;
+  --secondary: #333333;
+  --accent: #666666;
+  --dark: #000000;
+  --darker: #000000;
+  --light: #ffffff;
+  --text-color: #000000;
+  --bg-color: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --card-border: rgba(0, 0, 0, 0.1);
+  --input-bg: rgba(255, 255, 255, 0.9);
+  --input-border: rgba(0, 0, 0, 0.2);
+  --header-bg: rgba(255, 255, 255, 0.9);
+  --header-border: rgba(0, 0, 0, 0.1);
+  --sidebar-bg: rgba(255, 255, 255, 0.9);
+  --sidebar-border: rgba(0, 0, 0, 0.1);
+  --table-header-bg: rgba(255, 255, 255, 0.9);
+  --table-row-bg: rgba(255, 255, 255, 0.6);
+  --table-row-hover: rgba(245, 245, 245, 0.8);
+  --table-border: rgba(0, 0, 0, 0.1);
+  --footer-text: rgba(0, 0, 0, 0.5);
 }
 
 /* 浅色模式变量 */
 html:not(.dark) {
-  --text-color: #333333;
-  --bg-color: #f5f5f5;
+  --text-color: #000000;
+  --bg-color: #ffffff;
   --card-bg: rgba(255, 255, 255, 0.9);
-  --card-border: rgba(0, 240, 255, 0.3);
+  --card-border: rgba(0, 0, 0, 0.1);
   --input-bg: rgba(255, 255, 255, 0.9);
-  --input-border: rgba(0, 240, 255, 0.3);
+  --input-border: rgba(0, 0, 0, 0.2);
   --header-bg: rgba(255, 255, 255, 0.9);
-  --header-border: rgba(0, 240, 255, 0.3);
+  --header-border: rgba(0, 0, 0, 0.1);
   --sidebar-bg: rgba(255, 255, 255, 0.9);
-  --sidebar-border: rgba(0, 240, 255, 0.3);
-  --table-header-bg: rgba(245, 245, 245, 0.9);
+  --sidebar-border: rgba(0, 0, 0, 0.1);
+  --table-header-bg: rgba(255, 255, 255, 0.9);
   --table-row-bg: rgba(255, 255, 255, 0.6);
   --table-row-hover: rgba(245, 245, 245, 0.8);
-  --table-border: rgba(0, 240, 255, 0.2);
+  --table-border: rgba(0, 0, 0, 0.1);
   --footer-text: rgba(0, 0, 0, 0.5);
 }
 
@@ -64,12 +64,123 @@ body.sidebar-collapsed {
   --sidebar-current-width: var(--sidebar-width-collapsed);
 }
 
+/* 重置默认边距和内边距（与 Tailwind 兼容） */
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  font-family: 'Noto Sans SC', sans-serif;
-  color: var(--text-color);
+  font-family: 'Inter', system-ui, sans-serif;
   background: var(--bg-color);
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+/* 浅色背景默认文字颜色 */
+body {
+  color: var(--text-color);
+}
+
+/* 深色背景文字颜色 */
+.dark-bg {
+  color: white !important;
+}
+
+/* 深色背景下的链接和其他元素 */
+.dark-bg a {
+  color: white !important;
+}
+
+.dark-bg p {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.dark-bg .text-gray-300 {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.dark-bg .text-gray-400 {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 黑色背景按钮文字颜色 */
+button[class*="bg-black"],
+button[class*="bg-[#010120]"],
+a[class*="bg-black"],
+a[class*="bg-[#010120"] {
+  color: white !important;
+}
+
+/* 确保所有按钮在深色背景上都有白色文字 */
+.dark-bg button,
+.dark-bg a {
+  color: white !important;
+}
+
+/* 确保深色背景上的所有文字都是白色 */
+.dark-bg h1,
+.dark-bg h2,
+.dark-bg h3,
+.dark-bg h4,
+.dark-bg h5,
+.dark-bg h6 {
+  color: white !important;
+}
+
+/* 免费试用按钮效果 */
+button[onclick*="showTrialModal"],
+a[onclick*="showTrialModal"] {
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+}
+
+/* 浅色背景上的免费试用按钮文字颜色 */
+button[onclick*="showTrialModal"]:not([class*="bg-black"]):not([class*="bg-[#010120"]),
+a[onclick*="showTrialModal"]:not([class*="bg-black"]):not([class*="bg-[#010120"]) {
+  color: black !important;
+}
+
+/* 深色背景上的免费试用按钮文字颜色 */
+button[onclick*="showTrialModal"][class*="bg-black"],
+button[onclick*="showTrialModal"][class*="bg-[#010120"],
+a[onclick*="showTrialModal"][class*="bg-black"],
+a[onclick*="showTrialModal"][class*="bg-[#010120"] {
+  color: white !important;
+}
+
+button[onclick*="showTrialModal"]:hover,
+a[onclick*="showTrialModal"]:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+button[onclick*="showTrialModal"]:active,
+a[onclick*="showTrialModal"]:active {
+  transform: translateY(0) !important;
+}
+
+/* 白色背景上的按钮文字颜色 */
+.bg-white button,
+.bg-white a {
+  color: black !important;
+}
+
+/* 价格套餐按钮效果 */
+.pricing-section button {
+  color: black !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+}
+
+.pricing-section button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.pricing-section button:active {
+  transform: translateY(0) !important;
 }
 
 /* 背景效果 */
@@ -87,92 +198,27 @@ body {
 .bg-effects::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: 
-    radial-gradient(ellipse at 20% 20%, rgba(123, 44, 191, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(255, 0, 170, 0.05) 0%, transparent 70%);
-  animation: bgPulse 15s ease-in-out infinite;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
 }
 
-/* 浅色模式下的背景效果调整 */
-html:not(.dark) .bg-effects::before {
-  background: 
-    radial-gradient(ellipse at 20% 20%, rgba(123, 44, 191, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(0, 240, 255, 0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(255, 0, 170, 0.03) 0%, transparent 70%);
-}
-
-@keyframes bgPulse {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  33% { transform: translate(2%, 2%) rotate(1deg); }
-  66% { transform: translate(-1%, 1%) rotate(-1deg); }
-}
-
+/* 简化的网格线效果 */
 .grid-lines {
   position: absolute;
   width: 100%;
   height: 100%;
   background-image: 
-    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
-  animation: gridMove 20s linear infinite;
 }
 
-/* 浅色模式下的网格线效果调整 */
-html:not(.dark) .grid-lines {
-  background-image: 
-    linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
-}
-
-@keyframes gridMove {
-  0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-  100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
-}
-
-/* 浮动的粒子效果 */
+/* 移除粒子效果 */
 .particles {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: var(--primary);
-  border-radius: 50%;
-  animation: float 10s infinite;
-  opacity: 0.5;
-}
-
-/* 浅色模式下的粒子效果调整 */
-html:not(.dark) .particle {
-  opacity: 0.7;
-  box-shadow: 0 0 10px var(--primary);
-}
-
-@keyframes float {
-  0%, 100% { 
-    transform: translateY(100vh) rotate(0deg); 
-    opacity: 0;
-  }
-  10% { opacity: 0.5; }
-  90% { opacity: 0.5; }
-  100% { 
-    transform: translateY(-100vh) rotate(720deg); 
-    opacity: 0;
-  }
+  display: none;
 }
 
 .app-layout {
@@ -296,7 +342,7 @@ code {
 }
 
 .sidebar-nav-item:hover {
-  background-color: rgba(0, 240, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   color: var(--primary);
 }
 
@@ -312,7 +358,7 @@ code {
 }
 
 .sidebar-nav-item-selected {
-  background-color: rgba(0, 240, 255, 0.15);
+  background-color: rgba(0, 0, 0, 0.15);
   color: var(--primary);
   font-weight: 500;
   position: relative;
@@ -399,14 +445,14 @@ html.dark .sidebar-group-label {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 240, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
   color: var(--primary);
 }
 
 .sidebar-collapse-button-inner:hover {
-  background-color: rgba(0, 240, 255, 0.2);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar-collapse-icon-container {
@@ -1160,9 +1206,9 @@ html.dark .with-pastel-balls::before {
 .semi-card {
   background: var(--card-bg) !important;
   border: 1px solid var(--card-border) !important;
-  border-radius: 20px !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
-  transition: all 0.4s ease !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease !important;
   overflow: hidden !important;
   position: relative !important;
 }
@@ -1180,11 +1226,9 @@ html.dark .with-pastel-balls::before {
 }
 
 .semi-card:hover {
-  transform: translateY(-5px) !important;
-  border-color: rgba(0, 240, 255, 0.5) !important;
-  box-shadow: 
-    0 20px 60px rgba(0, 240, 255, 0.1),
-    0 0 40px rgba(123, 44, 191, 0.1) !important;
+  transform: translateY(-2px) !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
 }
 
 .semi-card:hover::before {
@@ -1211,19 +1255,19 @@ html.dark .with-pastel-balls::before {
 
 /* ==================== 按钮样式 ==================== */
 .semi-button {
-  background: linear-gradient(90deg, var(--primary), var(--secondary)) !important;
+  background: var(--primary) !important;
   border: none !important;
-  color: #000 !important;
-  font-weight: 700 !important;
+  color: white !important;
+  font-weight: 600 !important;
   font-size: 14px !important;
-  letter-spacing: 2px !important;
-  text-transform: uppercase !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
   transition: all 0.3s ease !important;
-  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 .semi-button:hover {
-  box-shadow: 0 0 30px rgba(0, 240, 255, 0.5) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
   transform: translateY(-2px) !important;
 }
 
@@ -1244,8 +1288,8 @@ html.dark .with-pastel-balls::before {
 }
 
 .semi-input-wrapper:hover {
-  border-color: rgba(0, 240, 255, 0.5) !important;
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2) !important;
+  border-color: rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important;
 }
 
 .semi-input {
@@ -1485,32 +1529,32 @@ a:hover {
 /* ==================== 滚动条样式统一管理 ==================== */
 /* 表格滚动条样式 */
 .semi-table-body::-webkit-scrollbar-thumb {
-  background: rgba(0, 240, 255, 0.3);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 2px;
 }
 
 .semi-table-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 240, 255, 0.5);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 /* 侧边抽屉滚动条样式 */
 .semi-sidesheet-body::-webkit-scrollbar-thumb {
-  background: rgba(0, 240, 255, 0.3);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 2px;
 }
 
 .semi-sidesheet-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 240, 255, 0.5);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 /* 图片列表滚动条样式 */
 .image-list-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0, 240, 255, 0.3);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 3px;
 }
 
 .image-list-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 240, 255, 0.5);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 /* ==================== 未读通知闪光效果 ==================== */
@@ -1519,7 +1563,7 @@ a:hover {
     90deg,
     currentColor 0%,
     currentColor 40%,
-    rgba(0, 240, 255, 0.9) 50%,
+    rgba(0, 0, 0, 0.9) 50%,
     currentColor 60%,
     currentColor 100%
   );
@@ -1547,8 +1591,8 @@ a:hover {
 
 /* ==================== 模型定价页面布局 ==================== */
 .pricing-sidebar {
-  background: rgba(10, 10, 15, 0.8) !important;
-  border-right: 1px solid rgba(0, 240, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
 .pricing-content {
@@ -1556,18 +1600,18 @@ a:hover {
 }
 
 .pricing-pagination-divider {
-  border-color: rgba(0, 240, 255, 0.2);
+  border-color: rgba(0, 0, 0, 0.1);
 }
 
 .pricing-search-header {
-  background: rgba(10, 10, 15, 0.9) !important;
-  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* ==================== 使用日志: channel affinity tag ==================== */
 .semi-tag.channel-affinity-tag {
-  border: 1px solid rgba(0, 240, 255, 0.35);
-  background-color: rgba(0, 240, 255, 0.15);
+  border: 1px solid rgba(239, 44, 193, 0.35);
+  background-color: rgba(239, 44, 193, 0.15);
   color: var(--primary);
   cursor: help;
   transition:
@@ -1577,21 +1621,21 @@ a:hover {
 }
 
 .semi-tag.channel-affinity-tag:hover {
-  background-color: rgba(0, 240, 255, 0.22);
-  border-color: rgba(0, 240, 255, 0.6);
-  box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.18);
+  background-color: rgba(239, 44, 193, 0.22);
+  border-color: rgba(239, 44, 193, 0.6);
+  box-shadow: 0 0 0 2px rgba(239, 44, 193, 0.18);
 }
 
 .semi-tag.channel-affinity-tag:active {
-  background-color: rgba(0, 240, 255, 0.28);
+  background-color: rgba(239, 44, 193, 0.28);
 }
 
 /* ==================== 表格卡片滚动设置 ==================== */
 .table-scroll-card .semi-card-body::-webkit-scrollbar-thumb {
-  background: rgba(0, 240, 255, 0.3);
+  background: rgba(239, 44, 193, 0.3);
   border-radius: 2px;
 }
 
 .table-scroll-card .semi-card-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 240, 255, 0.5);
+  background: rgba(239, 44, 193, 0.5);
 }
