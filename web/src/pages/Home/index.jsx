@@ -216,7 +216,7 @@ const Home = () => {
     
     // 新的首页内容
     const newHomeContent = `
-      <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
       <style>
         body { font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; }
         .text-future { letter-spacing: -0.045em; font-weight: 600; }
