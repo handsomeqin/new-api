@@ -275,9 +275,9 @@ const Home = () => {
         <div class="max-w-6xl mx-auto px-6">
           <div class="text-center mb-12"><span class="mono-label text-[#bdbbff]">支持模型</span><h2 class="text-4xl text-future tracking-tighter mt-3">主流国产大模型 · 按 Token 计费</h2></div>
           <div class="grid md:grid-cols-3 gap-8">
-            <div class="comfort bg-white/10 border border-white/20 p-8 text-center"><div class="w-16 h-16 bg-gradient-to-br from-[#ef2cc1] to-[#fc4c02] rounded-lg flex items-center justify-center text-white text-2xl mx-auto mb-6"><img src="/src/deepseek.svg" alt="DeepSeek" class="w-12 h-12 object-contain" /></div><div class="font-medium text-xl mb-3">DeepSeek 系列</div><p class="text-gray-300 text-sm mb-4">强推理、代码生成、数理逻辑</p><p class="text-gray-400 text-xs">国产之光 数学与代码能力达国际一流水平</p></div>
-            <div class="comfort bg-white/10 border border-white/20 p-8 text-center"><div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-2xl mx-auto mb-6"><img src="/src/qwen.svg" alt="Qwen" class="w-12 h-12 object-contain" /></div><div class="font-medium text-xl mb-3">Qwen 系列</div><p class="text-gray-300 text-sm mb-4">指令跟随、内容创作、多轮对话</p><p class="text-gray-400 text-xs">阿里云通义千问 中文创作理解与逻辑推理能力卓越</p></div>
-            <div class="comfort bg-white/10 border border-white/20 p-8 text-center"><div class="w-16 h-16 bg-gradient-to-br from-green-400 to-cyan-500 rounded-lg flex items-center justify-center text-white text-2xl mx-auto mb-6"><img src="/src/minimax.svg" alt="MiniMax" class="w-12 h-12 object-contain" /></div><div class="font-medium text-xl mb-3">MiniMax 系列</div><p class="text-gray-300 text-sm mb-4">超长上下文、Agent 编排</p><p class="text-gray-400 text-xs">支持 400 万 token 超长上下文，深度 Agent 编排满足复杂业务场景</p></div>
+            <div class="comfort bg-white/10 border border-white/20 p-8 text-center"><div class="w-16 h-16 bg-gradient-to-br from-[#ef2cc1] to-[#fc4c02] rounded-lg flex items-center justify-center text-white text-2xl mx-auto mb-6"><img src="/deepseek.svg" alt="DeepSeek" class="w-12 h-12 object-contain" /></div><div class="font-medium text-xl mb-3">DeepSeek 系列</div><p class="text-gray-300 text-sm mb-4">强推理、代码生成、数理逻辑</p><p class="text-gray-400 text-xs">国产之光 数学与代码能力达国际一流水平</p></div>
+            <div class="comfort bg-white/10 border border-white/20 p-8 text-center"><div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-2xl mx-auto mb-6"><img src="/qwen.svg" alt="Qwen" class="w-12 h-12 object-contain" /></div><div class="font-medium text-xl mb-3">Qwen 系列</div><p class="text-gray-300 text-sm mb-4">指令跟随、内容创作、多轮对话</p><p class="text-gray-400 text-xs">阿里云通义千问 中文创作理解与逻辑推理能力卓越</p></div>
+            <div class="comfort bg-white/10 border border-white/20 p-8 text-center"><div class="w-16 h-16 bg-gradient-to-br from-green-400 to-cyan-500 rounded-lg flex items-center justify-center text-white text-2xl mx-auto mb-6"><img src="/minimax.svg" alt="MiniMax" class="w-12 h-12 object-contain" /></div><div class="font-medium text-xl mb-3">MiniMax 系列</div><p class="text-gray-300 text-sm mb-4">超长上下文、Agent 编排</p><p class="text-gray-400 text-xs">支持 400 万 token 超长上下文，深度 Agent 编排满足复杂业务场景</p></div>
           </div>
         </div>
       </section>
@@ -325,10 +325,10 @@ const Home = () => {
             </div>
           </div>
           <div class="h-full flex items-center justify-center">
-            <div class="w-full h-64 rounded-2xl shadow-brand flex items-center justify-center">
-              <img src="/src/保障.jpeg" alt="服务保障" class="w-full h-full object-cover rounded-2xl" />
+              <div class="w-full h-64 rounded-2xl shadow-brand flex items-center justify-center">
+                <img src="/保障.jpeg" alt="服务保障" class="w-full h-full object-cover rounded-2xl" />
+              </div>
             </div>
-          </div>
         </div>
       </section>
 
@@ -369,21 +369,21 @@ const Home = () => {
           <div class="grid md:grid-cols-3 gap-8">
             <div class="comfort bg-white/10 border border-white/20 p-8">
               <div class="w-full h-32 rounded mb-6 flex items-center justify-center">
-                <img src="/src/中国移动.jpeg" alt="中国移动 AI 客服" class="w-full h-full object-cover rounded" />
+                <img src="/中国移动.jpeg" alt="中国移动 AI 客服" class="w-full h-full object-cover rounded" />
               </div>
               <h3 class="font-medium">中国移动 AI 客服</h3>
               <p class="text-sm text-gray-300 mt-3">智能客服系统日均处理 10 万+ 会话请求，高峰期并发提升 5 倍，准确率与响应速度均大幅领先，极大减轻人工坐席压力</p>
             </div>
             <div class="comfort bg-white/10 border border-white/20 p-8">
               <div class="w-full h-32 rounded mb-6 flex items-center justify-center">
-                <img src="/src/人保财险.jpeg" alt="人保财险 知识助手" class="w-full h-full object-cover rounded" />
+                <img src="/人保财险.jpeg" alt="人保财险 知识助手" class="w-full h-full object-cover rounded" />
               </div>
               <h3 class="font-medium">人保财险 知识助手</h3>
               <p class="text-sm text-gray-300 mt-3">内嵌大模型知识中台，业务人员查询效率提升 4 倍，理赔知识检索耗时缩短 70%，全面符合国产化合规要求</p>
             </div>
             <div class="comfort bg-white/10 border border-white/20 p-8">
               <div class="w-full h-32 rounded mb-6 flex items-center justify-center">
-                <img src="/src/自媒体.jpeg" alt="自媒体工作室" class="w-full h-full object-cover rounded" />
+                <img src="/自媒体.jpeg" alt="自媒体工作室" class="w-full h-full object-cover rounded" />
               </div>
               <h3 class="font-medium">自媒体工作室</h3>
               <p class="text-sm text-gray-300 mt-3">利用 AI 批量生成内容，单周产出量从 20 条跃升至 60 条，创意生产效率提升 3 倍，爆款内容孵化更轻松</p>
